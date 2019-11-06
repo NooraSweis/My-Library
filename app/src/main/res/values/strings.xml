@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DB Project</string>
+    <string name="show_books">عرض الكتب</string>
+    <string name="show_readers">المشتركون</string>
+    <string name="show_employees">الموظفون</string>
+    <string name="details">معلومات إضافية</string>
+</resources>
