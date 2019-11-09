@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
+    android:background="#FFFFFF"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -18,7 +18,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="3.5"
         android:orientation="horizontal">
 
         <Space
@@ -54,30 +54,33 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="3">-->
 
             <Button
                 android:id="@+id/btn_show_books"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
+                android:layout_weight="4"
                 android:background="@drawable/custom_button_main"
+                android:fontFamily="@font/nefel_adeti"
                 android:onClick="main_to_books"
                 android:text="@string/show_books"
-                android:textSize="25sp"
-                android:fontFamily="@font/elham_font"/>
+                android:textSize="30sp"
+                android:textStyle="bold"
 
-            <Button
-                android:id="@+id/btn_add_book"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/plus_sign" />
-        </RelativeLayout>
+                />
+
+            <!--            <Button-->
+            <!--                android:id="@+id/btn_add_book"-->
+            <!--                android:layout_width="25dp"-->
+            <!--                android:layout_height="25dp"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_alignParentBottom="true"-->
+            <!--                android:background="@drawable/plus_sign" />-->
+<!--        </RelativeLayout>-->
 
         <Space
             android:layout_width="0dp"
@@ -103,30 +106,31 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="3">-->
 
             <Button
                 android:id="@+id/btn_show_readers"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
+                android:layout_weight="4"
                 android:background="@drawable/custom_button_main"
+                android:fontFamily="@font/nefel_adeti"
                 android:onClick="main_to_readers"
                 android:text="@string/show_readers"
-                android:textSize="25sp"
-                android:fontFamily="@font/elham_font"/>
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btn_add_reader"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/plus_sign" />
-        </RelativeLayout>
+            <!--            <Button-->
+            <!--                android:id="@+id/btn_add_reader"-->
+            <!--                android:layout_width="25dp"-->
+            <!--                android:layout_height="25dp"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_alignParentBottom="true"-->
+            <!--                android:background="@drawable/plus_sign" />-->
+<!--        </RelativeLayout>-->
 
         <Space
             android:layout_width="0dp"
@@ -150,30 +154,31 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="3">-->
 
             <Button
                 android:id="@+id/btn_show_employees"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
+                android:layout_weight="4"
                 android:background="@drawable/custom_button_main"
+                android:fontFamily="@font/nefel_adeti"
                 android:onClick="main_to_employees"
                 android:text="@string/show_employees"
-                android:textSize="25sp"
-                android:fontFamily="@font/elham_font"/>
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btn_add_employee"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/plus_sign" />
-        </RelativeLayout>
+            <!--            <Button-->
+            <!--                android:id="@+id/btn_add_employee"-->
+            <!--                android:layout_width="25dp"-->
+            <!--                android:layout_height="25dp"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_alignParentBottom="true"-->
+            <!--                android:background="@drawable/plus_sign" />-->
+<!--        </RelativeLayout>-->
 
         <Space
             android:layout_width="0dp"
@@ -197,31 +202,30 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3">
-
+<!--        <RelativeLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="3">-->
             <Button
                 android:id="@+id/btn_show_details"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:background="@drawable/custom_button_main"
+                android:fontFamily="@font/nefel_adeti"
                 android:onClick="main_to_details"
                 android:text="@string/notes"
-                android:textSize="25sp"
-                android:fontFamily="@font/elham_font"/>
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btn_add_details"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/plus_sign" />
-        </RelativeLayout>
+            <!--            <Button-->
+            <!--                android:id="@+id/btn_add_details"-->
+            <!--                android:layout_width="25dp"-->
+            <!--                android:layout_height="25dp"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_alignParentBottom="true"-->
+            <!--                android:background="@drawable/plus_sign" />-->
+<!--        </RelativeLayout>-->
 
         <Space
             android:layout_width="0dp"
