@@ -26,7 +26,7 @@ public class ShowBooks extends AppCompatActivity {
 
         books_list = (ListView) findViewById(R.id.listView_show_books);
 
-//        connection = new DBConnection();
+        connection = new DBConnection();
 //        connection.getData();
 
 //        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());

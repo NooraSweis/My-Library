@@ -8,26 +8,41 @@ import java.sql.Statement;
 
 public class DBConnection {
 
-    final private String DB_URL = "jdbc:mysql://localhost:3306/library_db";
-    final private String USER = "nls";
-    final private String PASS = "123";
+    final String DB_URL = "jdbc:mysql://localhost:3306/library_db";
+    final String USER = "nls";
+    final String PASS = "123";
 
     Connection con = null;
     private Statement st = null;
     private ResultSet rs = null;
 
+//    public DBConnection() {
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//            con = DriverManager.getConnection(DB_URL, USER, PASS);
+//            if (con != null)
+//                st = con.createStatement();
+//            System.out.println("con & st initialized");
+//
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     public DBConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(DB_URL, USER, PASS);
-            if (con != null)
-            st = con.createStatement();
-            System.out.println("con & st initialized");
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                con = DriverManager.getConnection(DB_URL, USER, PASS);
+            } catch (SQLException ex) {
+                // log an exception. fro example:
+                System.out.println("Failed to create the database connection.");
+            }
+        } catch (ClassNotFoundException ex) {
+            // log an exception. for example:
+            System.out.println("Driver not found.");
         }
     }
 
