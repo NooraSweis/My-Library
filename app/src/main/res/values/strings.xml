@@ -4,4 +4,19 @@
     <string name="show_readers">المشتركون</string>
     <string name="show_employees">الموظفون</string>
     <string name="notes">ملاحظات</string>
+    <string name="book_name">اسم الكتاب:</string>
+    <string name="author_name">اسم المؤلف:</string>
+    <string name="publication_date">تاريخ النشر:</string>
+    <string name="publication_house">دار النشر:</string>
+    <string name="branch">الفرع:</string>
+    <string name="number_of_copies">عدد النسخ:</string>
+    <string name="employee_name">الاسم</string>
+    <string name="employee_id">ID</string>
+    <string name="employee_age">العمر</string>
+    <string name="employee_email">Email</string>
+    <string name="employee_phone">رقم الهاتف</string>
+    <string name="hire_date">تاريخ التوظيف</string>
+    <string name="position">المنصب</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
 </resources>
