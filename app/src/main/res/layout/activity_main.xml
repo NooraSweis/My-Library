@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2AA38177"
+    android:background="#40A38177"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -212,7 +212,7 @@
                 android:background="@drawable/custom_button_main"
                 android:fontFamily="@font/nefel_adeti"
                 android:onClick="main_to_details"
-                android:text="@string/notes"
+                android:text="تفاصيل"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 

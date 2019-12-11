@@ -19,4 +19,8 @@
     <string name="position">المنصب</string>
     <string name="save">حفظ</string>
     <string name="cancel">إلغاء</string>
+    <string name="reader_last_name">اﻻسم اﻷخير</string>
+    <string name="reader_first_name">اﻻسم اﻷول</string>
+    <string name="reader_gender">الجنس</string>
+    <string name="reader_subscription_date">تاريخ الاشتراك</string>
 </resources>
