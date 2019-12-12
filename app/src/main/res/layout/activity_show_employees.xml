@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,32 +8,25 @@
     android:orientation="vertical"
     tools:context=".ShowEmployees">
 
-
-<!--    <ListView-->
-<!--        android:id="@+id/listView_show_books"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="right"-->
-<!--        android:layout_weight="1"/>-->
-
-    <Button
-        android:layout_width="wrap_content"
+    <ListView
+        android:id="@+id/listView_show_employees"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/show_employees"
-        android:layout_marginTop="200dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="right">
+    </ListView>
 
-    <Button
-        android:layout_width="wrap_content"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/FAB_add_employee"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="insert"
+        android:clickable="true"
+        app:fabSize="normal"
+        app:backgroundTint="#90551818"
+        app:srcCompat="@drawable/add_icon"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
         android:onClick="showEmployeesToAddEmployee"/>
 
-    <TextView
-        android:id="@+id/textView"
-        android:textSize="20sp"
-        android:layout_width="match_parent"
-        android:layout_height="203dp"
-        android:text="TextView" />
-</LinearLayout>
+</RelativeLayout>

@@ -23,4 +23,6 @@
     <string name="reader_first_name">اﻻسم اﻷول</string>
     <string name="reader_gender">الجنس</string>
     <string name="reader_subscription_date">تاريخ الاشتراك</string>
+    <string name="date_of_birth">تاريخ الميلاد</string>
+    <string name="reader_address">العنوان</string>
 </resources>

@@ -86,6 +86,7 @@ public class DBconnections extends SQLiteOpenHelper {
                 + LibraryContract.ReadersEntry.COLUMN_READER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + LibraryContract.ReadersEntry.COLUMN_READER_FIRST_NAME + " TEXT NOT NULL, "
                 + LibraryContract.ReadersEntry.COLUMN_READER_LAST_NAME + " TEXT NOT NULL, "
+                + LibraryContract.ReadersEntry.COLUMN_READER_DATE_OF_BIRTH + " TEXT NOT NULL, "
                 + LibraryContract.ReadersEntry.COLUMN_READER_ADDRESS + " TEXT NOT NULL, "
                 + LibraryContract.ReadersEntry.COLUMN_READER_GENDER + " TEXT NOT NULL, "
                 + LibraryContract.ReadersEntry.COLUMN_READER_PHONE + " INTEGER NOT NULL, "

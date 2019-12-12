@@ -29,6 +29,7 @@ public final class LibraryContract {
         public final static String COLUMN_READER_ID = "ID";
         public final static String COLUMN_READER_FIRST_NAME = "first_name";
         public final static String COLUMN_READER_LAST_NAME = "last_name";
+        public final static String COLUMN_READER_DATE_OF_BIRTH = "date_of_birth";
         public final static String COLUMN_READER_ADDRESS = "address";
         public final static String COLUMN_READER_GENDER = "gender";
         public final static String COLUMN_READER_PHONE = "phone";
