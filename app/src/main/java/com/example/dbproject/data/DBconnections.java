@@ -4,6 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.dbproject.data.LibraryContract.BookCopiesEntry;
+import com.example.dbproject.data.LibraryContract.BooksEntry;
+import com.example.dbproject.data.LibraryContract.BranchesEntry;
+import com.example.dbproject.data.LibraryContract.EmployeesEntry;
+
 public class DBconnections extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
@@ -15,53 +20,53 @@ public class DBconnections extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String SQL_CREATE_BOOK_COPIES_TABLE = "CREATE TABLE " + LibraryContract.BookCopiesEntry.TABLE_NAME + "("
-                + LibraryContract.BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID + " INTEGER NOT NULL, "
-                + LibraryContract.BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + " INTEGER NOT NULL, "
-                + LibraryContract.BookCopiesEntry.COLUMN_BOOK_COPIES_RESERVED + " INTEGER NOT NULL, "
-                + "PRIMARY KEY(\"" + LibraryContract.BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
-                + "\",\"" + LibraryContract.BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + "\"),"
-                + "FOREIGN KEY (" + LibraryContract.BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
-                + ") REFERENCES " + LibraryContract.BooksEntry.TABLE_NAME + " ("
-                + LibraryContract.BooksEntry.COLUMN_BOOK_ID + ")"
+        String SQL_CREATE_BOOK_COPIES_TABLE = "CREATE TABLE " + BookCopiesEntry.TABLE_NAME + "("
+                + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID + " INTEGER NOT NULL, "
+                + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + " INTEGER NOT NULL, "
+                + BookCopiesEntry.COLUMN_BOOK_COPIES_RESERVED + " INTEGER NOT NULL, "
+                + "PRIMARY KEY(\"" + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
+                + "\",\"" + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + "\"),"
+                + "FOREIGN KEY (" + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
+                + ") REFERENCES " + BooksEntry.TABLE_NAME + " ("
+                + BooksEntry.COLUMN_BOOK_ID + ")"
                 + ");";
         db.execSQL(SQL_CREATE_BOOK_COPIES_TABLE);
 
-        String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + LibraryContract.BooksEntry.TABLE_NAME + "("
-                + LibraryContract.BooksEntry.COLUMN_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + LibraryContract.BooksEntry.COLUMN_BOOK_TITLE + " TEXT NOT NULL, "
-                + LibraryContract.BooksEntry.COLUMN_BOOK_PUBLICATION_DATE + " TEXT NOT NULL, "
-                + LibraryContract.BooksEntry.COLUMN_BOOK_PUBLICATION_HOUSE + " TEXT NOT NULL, "
-                + LibraryContract.BooksEntry.COLUMN_BOOK_AUTHOR + " TEXT NOT NULL, "
-                + LibraryContract.BooksEntry.COLUMN_BOOK_CATEGORY + " TEXT NOT NULL, "
-                + LibraryContract.BooksEntry.COLUMN_BOOK_BRANCH_ID + " INTEGER NOT NULL, "
-                + LibraryContract.BooksEntry.COLUMN_BOOK_NUMBER_OF_COPIES + " INTEGER NOT NULL, " +
-                "FOREIGN KEY (" + LibraryContract.BooksEntry.COLUMN_BOOK_BRANCH_ID
-                + ") REFERENCES " + LibraryContract.BranchesEntry.TABLE_NAME + " ("
-                + LibraryContract.BranchesEntry.COLUMN_BRANCH_ID + ")"
+        String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BooksEntry.TABLE_NAME + "("
+                + BooksEntry.COLUMN_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + BooksEntry.COLUMN_BOOK_TITLE + " TEXT NOT NULL, "
+                + BooksEntry.COLUMN_BOOK_PUBLICATION_DATE + " TEXT NOT NULL, "
+                + BooksEntry.COLUMN_BOOK_PUBLICATION_HOUSE + " TEXT NOT NULL, "
+                + BooksEntry.COLUMN_BOOK_AUTHOR + " TEXT NOT NULL, "
+                + BooksEntry.COLUMN_BOOK_CATEGORY + " TEXT NOT NULL, "
+                + BooksEntry.COLUMN_BOOK_BRANCH_ID + " INTEGER NOT NULL, "
+                + BooksEntry.COLUMN_BOOK_NUMBER_OF_COPIES + " INTEGER NOT NULL, " +
+                "FOREIGN KEY (" + BooksEntry.COLUMN_BOOK_BRANCH_ID
+                + ") REFERENCES " + BranchesEntry.TABLE_NAME + " ("
+                + BranchesEntry.COLUMN_BRANCH_ID + ")"
                 + ");";
         db.execSQL(SQL_CREATE_BOOKS_TABLE);
 
-        String SQL_CREATE_BRANCHES_TABLE = "CREATE TABLE " + LibraryContract.BranchesEntry.TABLE_NAME + "("
-                + LibraryContract.BranchesEntry.COLUMN_BRANCH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + LibraryContract.BranchesEntry.COLUMN_BRANCH_NAME + " TEXT NOT NULL, "
-                + LibraryContract.BranchesEntry.COLUMN_BRANCH_ADDRESS + " TEXT NOT NULL, "
-                + LibraryContract.BranchesEntry.COLUMN_BRANCH_PHONE + " INTEGER NOT NULL);";
+        String SQL_CREATE_BRANCHES_TABLE = "CREATE TABLE " + BranchesEntry.TABLE_NAME + "("
+                + BranchesEntry.COLUMN_BRANCH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + BranchesEntry.COLUMN_BRANCH_NAME + " TEXT NOT NULL, "
+                + BranchesEntry.COLUMN_BRANCH_ADDRESS + " TEXT NOT NULL, "
+                + BranchesEntry.COLUMN_BRANCH_PHONE + " INTEGER NOT NULL);";
         db.execSQL(SQL_CREATE_BRANCHES_TABLE);
 
-        String SQL_CREATE_EMPLOYEES_TABLE = "CREATE TABLE " + LibraryContract.EmployeesEntry.TABLE_NAME + "("
-                + LibraryContract.EmployeesEntry.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " TEXT NOT NULL, "
-                + LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_LAST_NAME + " TEXT NOT NULL, "
-                + LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_ADDRESS + " TEXT NOT NULL, "
-                + LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_BRANCH_ID + " INTEGER NOT NULL, "
-                + LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_HIRE_DATE + " TEXT NOT NULL, "
-                + LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_EMAIL + " TEXT NOT NULL, "
-                + LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_PHONE + " INTEGER NOT NULL, "
-                + LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_POSITION + " TEXT NOT NULL, " +
-                "FOREIGN KEY (" + LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_BRANCH_ID
-                + ") REFERENCES " + LibraryContract.BranchesEntry.TABLE_NAME + " ("
-                + LibraryContract.BranchesEntry.COLUMN_BRANCH_ID + ")"
+        String SQL_CREATE_EMPLOYEES_TABLE = "CREATE TABLE " + EmployeesEntry.TABLE_NAME + "("
+                + EmployeesEntry.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " TEXT NOT NULL, "
+                + EmployeesEntry.COLUMN_EMPLOYEE_LAST_NAME + " TEXT NOT NULL, "
+                + EmployeesEntry.COLUMN_EMPLOYEE_ADDRESS + " TEXT NOT NULL, "
+                + EmployeesEntry.COLUMN_EMPLOYEE_BRANCH_ID + " INTEGER NOT NULL, "
+                + EmployeesEntry.COLUMN_EMPLOYEE_HIRE_DATE + " TEXT NOT NULL, "
+                + EmployeesEntry.COLUMN_EMPLOYEE_EMAIL + " TEXT NOT NULL, "
+                + EmployeesEntry.COLUMN_EMPLOYEE_PHONE + " INTEGER NOT NULL, "
+                + EmployeesEntry.COLUMN_EMPLOYEE_POSITION + " TEXT NOT NULL, " +
+                "FOREIGN KEY (" + EmployeesEntry.COLUMN_EMPLOYEE_BRANCH_ID
+                + ") REFERENCES " + BranchesEntry.TABLE_NAME + " ("
+                + BranchesEntry.COLUMN_BRANCH_ID + ")"
                 + ");";
         db.execSQL(SQL_CREATE_EMPLOYEES_TABLE);
 

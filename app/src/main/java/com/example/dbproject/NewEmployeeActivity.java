@@ -1,20 +1,16 @@
 package com.example.dbproject;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import com.example.dbproject.data.LibraryContract.EmployeesEntry;
 import android.widget.Toast;
-
 import com.example.dbproject.data.DBconnections;
-import com.example.dbproject.data.LibraryContract;
 
 public class NewEmployeeActivity extends AppCompatActivity {
 
@@ -65,17 +61,17 @@ public class NewEmployeeActivity extends AppCompatActivity {
     private void insertData() {
         SQLiteDatabase db = employeesDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME, first_name.getText().toString().trim());
-        values.put(LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_LAST_NAME, last_name.getText().toString().trim());
-        values.put(LibraryContract.EmployeesEntry.ID, Integer.parseInt(ID.getText().toString().trim()));
-        values.put(LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_BRANCH_ID, Integer.parseInt(branch_id.getText().toString().trim()));
-        values.put(LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_ADDRESS, address.getText().toString().trim());
-        values.put(LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_EMAIL, email.getText().toString().trim());
-        values.put(LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_PHONE, Integer.parseInt(phone.getText().toString().trim()));
-        values.put(LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_HIRE_DATE, hire_date.getText().toString().trim());
-        values.put(LibraryContract.EmployeesEntry.COLUMN_EMPLOYEE_POSITION, position.getText().toString().trim());
+        values.put(EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME, first_name.getText().toString().trim());
+        values.put(EmployeesEntry.COLUMN_EMPLOYEE_LAST_NAME, last_name.getText().toString().trim());
+        values.put(EmployeesEntry.ID, Integer.parseInt(ID.getText().toString().trim()));
+        values.put(EmployeesEntry.COLUMN_EMPLOYEE_BRANCH_ID, Integer.parseInt(branch_id.getText().toString().trim()));
+        values.put(EmployeesEntry.COLUMN_EMPLOYEE_ADDRESS, address.getText().toString().trim());
+        values.put(EmployeesEntry.COLUMN_EMPLOYEE_EMAIL, email.getText().toString().trim());
+        values.put(EmployeesEntry.COLUMN_EMPLOYEE_PHONE, Integer.parseInt(phone.getText().toString().trim()));
+        values.put(EmployeesEntry.COLUMN_EMPLOYEE_HIRE_DATE, hire_date.getText().toString().trim());
+        values.put(EmployeesEntry.COLUMN_EMPLOYEE_POSITION, position.getText().toString().trim());
 
-        long newRowID = db.insert(LibraryContract.EmployeesEntry.TABLE_NAME, null, values);
+        long newRowID = db.insert(EmployeesEntry.TABLE_NAME, null, values);
         Log.v("EmployeesActivity", "new row id: " + newRowID);
     }
 

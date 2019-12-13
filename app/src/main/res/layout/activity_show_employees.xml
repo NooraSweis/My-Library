@@ -9,10 +9,13 @@
     tools:context=".ShowEmployees">
 
     <ListView
-        android:id="@+id/listView_show_employees"
+        android:id="@+id/listView_show_readers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right">
+        android:layout_gravity="right"
+        android:layout_margin="20dp"
+        android:background="@drawable/tv_list_style"
+        >
     </ListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -34,6 +34,9 @@ public final class LibraryContract {
         public final static String COLUMN_READER_GENDER = "gender";
         public final static String COLUMN_READER_PHONE = "phone";
         public final static String COLUMN_READER_SUB_STATUS = "sub_status";
+
+        public static final int GENDER_MALE = 0;
+        public static final int GENDER_FEMALE = 1;
     }
 
     public static final class BooksEntry implements BaseColumns {
