@@ -8,27 +8,46 @@
     android:orientation="vertical"
     tools:context=".ShowReaders">
 
-    <ListView
-        android:id="@+id/listView_show_readers"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_margin="20dp"
-        android:background="@drawable/tv_list_style"
-        >
-    </ListView>
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/edtxt_search_reader"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/custom_background_search"
+            android:layout_margin="20dp"
+            android:hint="@string/search"
+            android:textAlignment="center"
+            android:fontFamily="@font/nefel_adeti"
+            android:textSize="20sp"
+            />
+        <ListView
+            android:id="@+id/listView_show_readers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/tv_list_style"
+            >
+        </ListView>
+
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         app:fabSize="normal"
         app:backgroundTint="#90551818"
         app:srcCompat="@drawable/add_icon"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         android:onClick="to_add_readers"/>
 

@@ -7,7 +7,6 @@
     android:background="#A38177"
     android:orientation="vertical">
 
-
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -24,7 +23,6 @@
         android:hint="البحث"
         android:textAlignment="center"
         android:textSize="25sp" />
-
 
     <Space
         android:layout_width="match_parent"
@@ -235,7 +233,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.7" />
-
 
     </LinearLayout>
 

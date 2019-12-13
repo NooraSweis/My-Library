@@ -8,6 +8,8 @@ import com.example.dbproject.data.LibraryContract.BookCopiesEntry;
 import com.example.dbproject.data.LibraryContract.BooksEntry;
 import com.example.dbproject.data.LibraryContract.BranchesEntry;
 import com.example.dbproject.data.LibraryContract.EmployeesEntry;
+import com.example.dbproject.data.LibraryContract.ReadersEntry;
+import com.example.dbproject.data.LibraryContract.SubscriptionsEntry;
 
 public class DBconnections extends SQLiteOpenHelper {
 
@@ -88,31 +90,102 @@ public class DBconnections extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_READER_REQUESTS_TABLE);
 
         String SQL_CREATE_READERS_TABLE = "CREATE TABLE " + LibraryContract.ReadersEntry.TABLE_NAME + "("
-                + LibraryContract.ReadersEntry.COLUMN_READER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + LibraryContract.ReadersEntry.COLUMN_READER_FIRST_NAME + " TEXT NOT NULL, "
-                + LibraryContract.ReadersEntry.COLUMN_READER_LAST_NAME + " TEXT NOT NULL, "
-                + LibraryContract.ReadersEntry.COLUMN_READER_DATE_OF_BIRTH + " TEXT NOT NULL, "
-                + LibraryContract.ReadersEntry.COLUMN_READER_ADDRESS + " TEXT NOT NULL, "
-                + LibraryContract.ReadersEntry.COLUMN_READER_GENDER + " TEXT NOT NULL, "
-                + LibraryContract.ReadersEntry.COLUMN_READER_PHONE + " INTEGER NOT NULL, "
-                + LibraryContract.ReadersEntry.COLUMN_READER_SUB_STATUS + " TEXT NOT NULL);";
+                + ReadersEntry.COLUMN_READER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ReadersEntry.COLUMN_READER_FIRST_NAME + " TEXT NOT NULL, "
+                + ReadersEntry.COLUMN_READER_LAST_NAME + " TEXT NOT NULL, "
+                + ReadersEntry.COLUMN_READER_DATE_OF_BIRTH + " TEXT NOT NULL, "
+                + ReadersEntry.COLUMN_READER_ADDRESS + " TEXT NOT NULL, "
+                + ReadersEntry.COLUMN_READER_GENDER + " TEXT NOT NULL, "
+                + ReadersEntry.COLUMN_READER_PHONE + " INTEGER NOT NULL, "
+                + ReadersEntry.COLUMN_READER_SUB_STATUS + " TEXT NOT NULL);";
         db.execSQL(SQL_CREATE_READERS_TABLE);
 
-        String SQL_CREATE_SUB_TABLE = "CREATE TABLE " + LibraryContract.SubscriptionsEntry.TABLE_NAME + "("
-                + LibraryContract.SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID + " INTEGER NOT NULL, "
-                + LibraryContract.SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_SUB_DATE + " TEXT NOT NULL, "
-                + LibraryContract.SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_END_DATE + " TEXT NOT NULL, "
-                + LibraryContract.SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_STATUS + " TEXT NOT NULL, " +
-                "PRIMARY KEY(\"" + LibraryContract.SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID
-                + "\",\"" + LibraryContract.SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_SUB_DATE + "\"),"
-                + "FOREIGN KEY (" + LibraryContract.SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID
-                + ") REFERENCES " + LibraryContract.ReadersEntry.TABLE_NAME + " ("
-                + LibraryContract.ReadersEntry.COLUMN_READER_ID + "), " +
-                "FOREIGN KEY (" + LibraryContract.SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID
-                + ") REFERENCES " + LibraryContract.ReadersEntry.TABLE_NAME + " ("
-                + LibraryContract.ReadersEntry.COLUMN_READER_ID + ")"
+        String SQL_CREATE_SUB_TABLE = "CREATE TABLE " + SubscriptionsEntry.TABLE_NAME + "("
+                + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID + " INTEGER NOT NULL, "
+                + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_SUB_DATE + " TEXT NOT NULL, "
+                + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_END_DATE + " TEXT NOT NULL, "
+                + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_STATUS + " TEXT NOT NULL, " +
+                "PRIMARY KEY(\"" + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID
+                + "\",\"" + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_SUB_DATE + "\"),"
+                + "FOREIGN KEY (" + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID
+                + ") REFERENCES " + ReadersEntry.TABLE_NAME + " ("
+                + ReadersEntry.COLUMN_READER_ID + "), " +
+                "FOREIGN KEY (" + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID
+                + ") REFERENCES " + ReadersEntry.TABLE_NAME + " ("
+                + ReadersEntry.COLUMN_READER_ID + ")"
                 + ");";
         db.execSQL(SQL_CREATE_SUB_TABLE);
+
+        /*
+        Insert initial rows to the database
+         */
+        insertDefaultRecordsToReaders(db);
+        insertDefaultRecordsToBranches(db);
+    }
+
+    private void insertDefaultRecordsToBranches(SQLiteDatabase db) {
+        String insert_to_branches = "INSERT INTO " + BranchesEntry.TABLE_NAME + " VALUES (1, 'مكتبة طولكرم', 'طولكرم', 092632323);";
+        db.execSQL(insert_to_branches);
+        insert_to_branches = "INSERT INTO " + BranchesEntry.TABLE_NAME + " VALUES (2, 'مكتبة نابلس', 'نابلس', 092687877);";
+        db.execSQL(insert_to_branches);
+        insert_to_branches = "INSERT INTO " + BranchesEntry.TABLE_NAME + " VALUES (3, 'مكتبة رام الله', 'رام الله', 096968747);";
+        db.execSQL(insert_to_branches);
+        insert_to_branches = "INSERT INTO " + BranchesEntry.TABLE_NAME + " VALUES (4, 'مكتبة جنين', 'جنين', 096363555);";
+        db.execSQL(insert_to_branches);
+    }
+
+    private void insertDefaultRecordsToReaders(SQLiteDatabase db) {
+        String insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1000, 'نورا', 'صويص', '1999-09-11', 'طولكرم', 'أنثى', 0595483013, 'فعال');";
+        db.execSQL(insert_to_readers);
+        String insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1000, '2019-12-12', '2020-12-12', 'فعال');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1001, 'علا', 'تيسير', '1994-04-22', 'نابلس', 'أنثى', 0598765485, 'منتهٍ');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1001, '2010-01-03', '2011-01-03', 'منتهٍ');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1002, 'رضا', 'حمدان', '1991-11-03', 'رام الله', 'ذكر', 0598763238, 'فعال');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1002, '2019-08-11', '2020-08-11', 'فعال');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1003, 'نور', 'بدران', '1996-01-12', 'رام الله', 'أنثى', 0598743011, 'فعال');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1003, '2019-11-04', '2020-11-04', 'فعال');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1004, 'أحمد', 'خالد', '2000-06-30', 'نابلس', 'ذكر', 0532163321, 'فعال');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1004, '2017-06-04', '2018-06-04', 'منتهٍ');";
+        db.execSQL(insert_to_sub);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1004, '2019-01-22', '2020-01-22', 'فعال');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1005, 'طارق', 'إبراهيم', '2004-12-02', 'جنين', 'ذكر', 0563212325, 'منتهٍ');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1005, '2005-10-16', '2006-10-16', 'منتهٍ');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1006, 'سجى', 'بدير', '2001-10-07', 'طولكرم', 'أنثى', 0598787888, 'فعال');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1006, '2019-02-23', '2020-02-23', 'فعال');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1007, 'حلا', 'يحيى', '1990-03-15', 'طولكرم', 'أنثى', 0153256322, 'فعال');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1007, '2019-05-11', '2020-05-11', 'فعال');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1008, 'سندس', 'ياسر', '1989-07-23', 'طولكرم', 'أنثى', 0569878896, 'منتهٍ');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1008, '2018-07-12', '2019-07-12', 'منتهٍ');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1009, 'رامي', 'عمر', '1985-09-06', 'جنين', 'ذكر', 0596363654, 'فعال');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1009, '2019-09-19', '2019-09-19', 'فعال');";
+        db.execSQL(insert_to_sub);
     }
 
     @Override
