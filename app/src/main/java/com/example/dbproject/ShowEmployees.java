@@ -52,7 +52,6 @@ public class ShowEmployees extends AppCompatActivity {
         employees_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(position);
                 String select_readers_query = "SELECT * FROM " + EmployeesEntry.TABLE_NAME + " ORDER BY " + EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " ASC";
                 cursor = db.rawQuery(select_readers_query, null);
                 cursor.moveToPosition(position);

@@ -1,16 +1,29 @@
 package com.example.dbproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
+
 import com.example.dbproject.data.LibraryContract.EmployeesEntry;
+
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.dbproject.data.DBconnections;
+
+import java.util.Calendar;
 
 public class NewEmployeeActivity extends AppCompatActivity {
 
@@ -18,13 +31,15 @@ public class NewEmployeeActivity extends AppCompatActivity {
 
     EditText first_name;
     EditText last_name;
-    EditText ID;
+    TextView ID;
     EditText branch_id;
     EditText address;
     EditText email;
     EditText phone;
-    EditText hire_date;
+    TextView hire_date;
     EditText position;
+
+    DatePickerDialog.OnDateSetListener datePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,23 +48,59 @@ public class NewEmployeeActivity extends AppCompatActivity {
 
         employeesDBHelper = new DBconnections(this);
 
-        first_name = (EditText) findViewById(R.id.edtxt_first_name);
-        last_name = (EditText) findViewById(R.id.edtxt_last_name);
-        ID = (EditText) findViewById(R.id.edtxt_ID);
-        branch_id = (EditText) findViewById(R.id.edtxt_branch_id);
-        address = (EditText) findViewById(R.id.edtxt_address);
-        email = (EditText) findViewById(R.id.edtxt_email);
-        phone = (EditText) findViewById(R.id.edtxt_phone);
-        hire_date = (EditText) findViewById(R.id.edtxt_hire_date);
-        position = (EditText) findViewById(R.id.edtxt_position);
+        first_name = findViewById(R.id.edtxt_employee_first_name);
+        last_name = findViewById(R.id.edtxt_employee_last_name);
+        ID = findViewById(R.id.edtxt_employee_id);
+        branch_id = findViewById(R.id.edtxt_employee_branch_id);
+        address = findViewById(R.id.edtxt_employee_address);
+        email = findViewById(R.id.edtxt_employee_email);
+        phone = findViewById(R.id.edtxt_employee_phone);
+        hire_date = findViewById(R.id.edtxt_employee_hire_date);
+        position = findViewById(R.id.edtxt_employee_position);
+
+        hire_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(NewEmployeeActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        datePicker,
+                        year, month, day);
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.show();
+            }
+        });
+        datePicker = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month = month + 1;
+                String date = year + "-" + month + "-" + dayOfMonth;
+                hire_date.setText(date);
+            }
+        };
+
+        setNewID();
+    }
+
+    private void setNewID() {
+        DBconnections dbHelper = new DBconnections(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String select_employees_query = "SELECT " + EmployeesEntry.ID + " FROM " + EmployeesEntry.TABLE_NAME + " ORDER BY " + EmployeesEntry.ID + " ASC";
+        Cursor cursor = db.rawQuery(select_employees_query, null);
+        cursor.moveToLast();
+        ID.setText((cursor.getInt(0) + 1) + "");
+        cursor.close();
     }
 
     public void add_employee(View view) {
         if (first_name.getText().toString().isEmpty() || last_name.getText().toString().isEmpty()
-                ||ID.getText().toString().isEmpty() || branch_id.getText().toString().isEmpty()
-                ||address.getText().toString().isEmpty() ||email.getText().toString().isEmpty()
-                ||phone.getText().toString().isEmpty() ||hire_date.getText().toString().isEmpty()
-                ||position.getText().toString().isEmpty()) {
+                || ID.getText().toString().isEmpty() || branch_id.getText().toString().isEmpty()
+                || address.getText().toString().isEmpty() || email.getText().toString().isEmpty()
+                || phone.getText().toString().isEmpty() || hire_date.getText().toString().isEmpty()
+                || position.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Fill all fields, please!", Toast.LENGTH_SHORT).show();
         } else {
             insertData();
@@ -79,33 +130,4 @@ public class NewEmployeeActivity extends AppCompatActivity {
         startActivity(new Intent(this, ShowEmployees.class));
         Toast.makeText(getApplicationContext(), "Nothing added", Toast.LENGTH_SHORT).show();
     }
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        displayDatabaseInfo();
-//    }
-//
-//    private void displayDatabaseInfo() {
-//        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-//        // and pass the context, which is the current activity.
-//        DBconnections mDbHelper = new DBconnections(this);
-//
-//        // Create and/or open a database to read from it
-//        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-//
-//        // Perform this raw SQL query "SELECT * FROM pets"
-//        // to get a Cursor that contains all rows from the pets table.
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + LibraryContract.EmployeesEntry.TABLE_NAME, null);
-//        try {
-//            // Display the number of rows in the Cursor (which reflects the number of rows in the
-//            // pets table in the database).
-//            TextView displayView = (TextView) findViewById(R.id.textView);
-//            displayView.setText("Number of rows in pets database table: " + cursor.getCount());
-//        } finally {
-//            // Always close the cursor when you're done reading from it. This releases all its
-//            // resources and makes it invalid.
-//            cursor.close();
-//        }
-//    }
 }

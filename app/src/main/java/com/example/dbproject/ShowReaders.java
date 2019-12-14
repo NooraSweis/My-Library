@@ -1,29 +1,33 @@
 package com.example.dbproject;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dbproject.data.DBconnections;
+import com.example.dbproject.data.LibraryContract;
 import com.example.dbproject.data.LibraryContract.ReadersEntry;
+import com.example.dbproject.data.LibraryContract.SubscriptionsEntry;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ShowReaders extends AppCompatActivity {
 
@@ -38,6 +42,15 @@ public class ShowReaders extends AppCompatActivity {
     Cursor cursor;
 
     EditText search_edtxt;
+    public static String selected_reader_id = "";
+    public static String selected_reader_first_name = "";
+    public static String selected_reader_last_name = "";
+    public static String selected_reader_address = "";
+    public static String selected_reader_gender = "";
+    public static String selected_reader_date_of_birth = "";
+    public static String selected_reader_phone = "";
+    public static String selected_reader_sub_date = "";
+    public static String selected_reader_sub_status = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +72,23 @@ public class ShowReaders extends AppCompatActivity {
                 String select_readers_query = "SELECT * FROM " + ReadersEntry.TABLE_NAME + " ORDER BY " + ReadersEntry.COLUMN_READER_FIRST_NAME + " ASC";
                 cursor = db.rawQuery(select_readers_query, null);
                 cursor.moveToPosition(position);
-                String info = "رقم المشترك: " + cursor.getInt(0) + "\n"
-                        + "اسم المشترك: " + cursor.getString(1) + " " + cursor.getString(2) + "\n"
-                        + "تاريخ الميلاد: " + cursor.getString(3) + "\n"
-                        + "العنوان: " + cursor.getString(4) + "\n"
-                        + "الجنس: " + cursor.getString(5) + "\n"
-                        + "الهاتف: " + cursor.getInt(6) + "\n"
-                        + "حالة الاشتراك: " + cursor.getString(7);
+                selected_reader_id = cursor.getInt(0) + "";
+                selected_reader_first_name = cursor.getString(1);
+                selected_reader_last_name = cursor.getString(2);
+                selected_reader_date_of_birth = cursor.getString(3);
+                selected_reader_address = cursor.getString(4);
+                selected_reader_gender = cursor.getString(5);
+                selected_reader_phone = cursor.getInt(6) + "";
+                selected_reader_sub_status = cursor.getString(7);
+
+                String info = "الرقم: " + selected_reader_id + "\n"
+                        + "الاسم: " + selected_reader_first_name + " " + selected_reader_last_name + "\n"
+                        + "تاريخ الميلاد: " + selected_reader_date_of_birth + "\n"
+                        + "العنوان: " + selected_reader_address + "\n"
+                        + "الجنس: " + selected_reader_gender + "\n"
+                        + "الهاتف: " + selected_reader_phone + "\n"
+                        + "حالة الاشتراك: " + selected_reader_sub_status;
+
                 openDialog(info);
             }
         });
@@ -101,9 +124,69 @@ public class ShowReaders extends AppCompatActivity {
     }
 
     private void openDialog(String info) {
-        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("معلومات المشترك: \n\n" + info).show();
-        TextView textView = (TextView) dialog.findViewById(android.R.id.message);
-        textView.setTextSize(20);
+//        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("معلومات المشترك: \n\n" + info).show();
+//        TextView textView = (TextView) dialog.findViewById(android.R.id.message);
+//        textView.setTextSize(20);
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.reader_dialog);
+        TextView tv_info = dialog.findViewById(R.id.textView_display_reader_info);
+        Button btn_remove = dialog.findViewById(R.id.btn_remove_reader);
+        Button btn_renew = dialog.findViewById(R.id.btn_renew_reader_sub);
+        Button btn_edit = dialog.findViewById(R.id.btn_edit_reader_info);
+        if (selected_reader_sub_status.equals("فعال")) {
+            btn_renew.setEnabled(false);
+        }
+        tv_info.setText(info);
+        btn_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String remove_reader_query = "DELETE FROM " + ReadersEntry.TABLE_NAME + " WHERE " + ReadersEntry.COLUMN_READER_ID + " = " + Integer.parseInt(selected_reader_id);
+                db.execSQL(remove_reader_query);
+                Toast.makeText(getApplicationContext(), "تم حذف المشترك", Toast.LENGTH_SHORT).show();
+                listItem.clear();
+                viewData();
+                dialog.dismiss();
+            }
+        });
+        btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ShowReaders.this, NewReaderActivity.class));
+            }
+        });
+        btn_renew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                renew_subscription();
+            }
+        });
+        dialog.show();
+    }
+
+    private void renew_subscription() {
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID, selected_reader_id);
+        //Get current date
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        values.put(SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_SUB_DATE, df.format(c));
+        //Get next year date
+        String[] next = df.format(c).split("-");
+        next[0] = (Integer.parseInt(next[0]) + 1) + "";
+        values.put(SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_END_DATE, next[0] + "-" + next[1] + "-" + next[2]);
+        values.put(SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_STATUS, "فعال");
+        //Update subscription status in readers table
+        ContentValues up_values = new ContentValues();
+        up_values.put(ReadersEntry.COLUMN_READER_SUB_STATUS, "فعال");
+        database.update(ReadersEntry.TABLE_NAME, up_values, ReadersEntry.COLUMN_READER_ID + " = ?", new String[]{selected_reader_id});
+        //Insert values to subscription table
+        database.insert(SubscriptionsEntry.TABLE_NAME, null, values);
+        //close dialog
+        Toast.makeText(getApplicationContext(), "تم تجديد الاشتراك", Toast.LENGTH_SHORT).show();
+        //Update listView
+        listItem.clear();
+        viewData();
     }
 
     public void to_add_readers(View view) {
