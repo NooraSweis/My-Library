@@ -22,18 +22,6 @@ public class DBconnections extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String SQL_CREATE_BOOK_COPIES_TABLE = "CREATE TABLE " + BookCopiesEntry.TABLE_NAME + "("
-                + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID + " INTEGER NOT NULL, "
-                + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + " INTEGER NOT NULL, "
-                + BookCopiesEntry.COLUMN_BOOK_COPIES_RESERVED + " INTEGER NOT NULL, "
-                + "PRIMARY KEY(\"" + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
-                + "\",\"" + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + "\"),"
-                + "FOREIGN KEY (" + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
-                + ") REFERENCES " + BooksEntry.TABLE_NAME + " ("
-                + BooksEntry.COLUMN_BOOK_ID + ")"
-                + ");";
-        db.execSQL(SQL_CREATE_BOOK_COPIES_TABLE);
-
         String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BooksEntry.TABLE_NAME + "("
                 + BooksEntry.COLUMN_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + BooksEntry.COLUMN_BOOK_TITLE + " TEXT NOT NULL, "
@@ -48,6 +36,18 @@ public class DBconnections extends SQLiteOpenHelper {
                 + BranchesEntry.COLUMN_BRANCH_ID + ")"
                 + ");";
         db.execSQL(SQL_CREATE_BOOKS_TABLE);
+
+        String SQL_CREATE_BOOK_COPIES_TABLE = "CREATE TABLE " + BookCopiesEntry.TABLE_NAME + "("
+                + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID + " INTEGER NOT NULL, "
+                + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + " INTEGER NOT NULL, "
+                + BookCopiesEntry.COLUMN_BOOK_COPIES_RESERVED + " INTEGER NOT NULL, "
+                + "PRIMARY KEY(\"" + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
+                + "\",\"" + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + "\"),"
+                + "FOREIGN KEY (" + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
+                + ") REFERENCES " + BooksEntry.TABLE_NAME + " ("
+                + BooksEntry.COLUMN_BOOK_ID + ")"
+                + ");";
+        db.execSQL(SQL_CREATE_BOOK_COPIES_TABLE);
 
         String SQL_CREATE_BRANCHES_TABLE = "CREATE TABLE " + BranchesEntry.TABLE_NAME + "("
                 + BranchesEntry.COLUMN_BRANCH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -121,6 +121,57 @@ public class DBconnections extends SQLiteOpenHelper {
          */
         insertDefaultRecordsToReaders(db);
         insertDefaultRecordsToBranches(db);
+        insertDefaultRecordsToEmployees(db);
+        insertDefaultRecordsToBooks(db);
+    }
+
+    private void insertDefaultRecordsToBooks(SQLiteDatabase db) {
+        String insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1000, 'أحياء حلب القديمة', '2006-12-03', 'وزارة الثقافة السورية', 'خير الدين الأسدي', 'التاريخ', 1, 1);";
+        db.execSQL(insert_to_books);
+        String insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1000, 1, 0);";
+        db.execSQL(insert_to_copies);
+
+        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1001, 'أرض زيكولا', '2010-10-13', 'صرح للنشر والتوزيع', 'عمرو عبد الحميد', 'روايات وقصص أدبية', 1, 2);";
+        db.execSQL(insert_to_books);
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1001, 1, 0);";
+        db.execSQL(insert_to_copies);
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1001, 2, 0);";
+        db.execSQL(insert_to_copies);
+
+        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1002, 'حديث الصباح', '2015-02-11', 'دار كلمات', 'أدهم الشرقاوي', 'روايات وقصص أدبية', 1, 2);";
+        db.execSQL(insert_to_books);
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1002, 1, 0);";
+        db.execSQL(insert_to_copies);
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1002, 2, 0);";
+        db.execSQL(insert_to_copies);
+
+        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1003, 'أسرار عقل المليونير', '2017-11-23', 'جرير', 'هارف ايكر', 'تنمية', 1, 1);";
+        db.execSQL(insert_to_books);
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1003, 1, 0);";
+        db.execSQL(insert_to_copies);
+    }
+
+    private void insertDefaultRecordsToEmployees(SQLiteDatabase db) {
+        String insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1000, 'أحمد', 'خالد', 'طولكرم', 1, '2014-02-12', 'ahmad@mylibrary.com', 0598765654, 'مدير');";
+        db.execSQL(insert_to_employees);
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1001, 'فاتن', 'محمد', 'طولكرم', 1, '2014-05-23', 'faten@mylibrary.com', 0596326451, 'مساعد');";
+        db.execSQL(insert_to_employees);
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1002, 'بانا', 'علي', 'طولكرم', 1, '2014-04-12', 'bana@mylibrary.com', 0596874130, 'مساعد');";
+        db.execSQL(insert_to_employees);
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1003, 'محمود', 'مهنا', 'طولكرم', 1, '2015-06-01', 'mahmoud@mylibrary.com', 0985656585, 'مساعد');";
+        db.execSQL(insert_to_employees);
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1004, 'أحمد', 'مجدي', 'نابلس',2, '2015-11-23', 'ahmad-m@mylibrary.com', 0236523623, 'مدير');";
+        db.execSQL(insert_to_employees);
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1005, 'محمد', 'نور', 'نابلس', 2, '2015-12-14', 'mohammad@mylibrary.com', 0596656523, 'مساعد');";
+        db.execSQL(insert_to_employees);
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1006, 'عادل', 'راجح', 'رام الله', 2, '2016-02-28', 'adel@mylibrary.com', 0548779654, 'مساعد');";
+        db.execSQL(insert_to_employees);
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1007, 'دينا', 'رائد', 'جنين', 3, '2017-09-10', 'dena@mylibrary.com', 0598595841, 'مدير');";
+        db.execSQL(insert_to_employees);
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1008, 'أسيل', 'راشد', 'طولكرم', 3, '2017-09-12', 'aseel@mylibrary.com', 0595252456, 'مساعد');";
+        db.execSQL(insert_to_employees);
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1009, 'بهاء', 'فيصل', 'جنين', 3, '2019-10-03', 'bahaa@mylibrary.com', 0595654235, 'مساعد');";
+        db.execSQL(insert_to_employees);
     }
 
     private void insertDefaultRecordsToBranches(SQLiteDatabase db) {

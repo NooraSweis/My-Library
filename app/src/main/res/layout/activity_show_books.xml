@@ -7,13 +7,31 @@
     android:orientation="vertical"
     tools:context=".ShowBooks">
 
-    <ListView
-        android:id="@+id/listView_show_books"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end">
-        
-    </ListView>
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edtxt_search_book"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/custom_background_search"
+            android:fontFamily="@font/nefel_adeti"
+            android:hint="@string/search"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <ListView
+            android:id="@+id/listView_show_books"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/tv_list_style" />
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/FAB_add_books"
@@ -25,7 +43,7 @@
         android:layout_marginBottom="15dp"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="showBooksToAddBooke"
+        android:onClick="showBooksToAddBooks"
         app:backgroundTint="#90551818"
         app:fabSize="normal"
         app:srcCompat="@drawable/add_icon" />

@@ -70,6 +70,7 @@ public class NewReaderActivity extends AppCompatActivity {
         save = findViewById(R.id.button_reader_save);
 
         setNewID();
+        datePickers();
 
         if (!selected_reader_id.isEmpty()) {
             get_sub_date();
@@ -83,53 +84,6 @@ public class NewReaderActivity extends AppCompatActivity {
             sub_date.setText(selected_reader_sub_date);
             phone.setText(selected_reader_phone);
         }
-        date_of_birth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NewReaderActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        datePicker,
-                        year, month, day);
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                datePickerDialog.show();
-            }
-        });
-        datePicker = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
-                String date = year + "-" + month + "-" + dayOfMonth;
-                date_of_birth.setText(date);
-            }
-        };
-
-        sub_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NewReaderActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        datePicker2,
-                        year, month, day);
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                datePickerDialog.show();
-            }
-        });
-        datePicker2 = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
-                String date = year + "-" + month + "-" + dayOfMonth;
-                sub_date.setText(date);
-            }
-        };
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,15 +113,6 @@ public class NewReaderActivity extends AppCompatActivity {
     }
 
     private void update_reader() {
-//        String query = "UPDATE " + ReadersEntry.TABLE_NAME + " SET " +
-//                ReadersEntry.COLUMN_READER_FIRST_NAME + " = '" + selected_reader_first_name + "', " +
-//                ReadersEntry.COLUMN_READER_LAST_NAME + " = '" + selected_reader_last_name + "', " +
-//                ReadersEntry.COLUMN_READER_DATE_OF_BIRTH + " = '" + selected_reader_date_of_birth + "', " +
-//                ReadersEntry.COLUMN_READER_GENDER + " = '" + selected_reader_gender + "', " +
-//                ReadersEntry.COLUMN_READER_ADDRESS + " = '" + selected_reader_address + "', " +
-//                ReadersEntry.COLUMN_READER_PHONE + " = " + selected_reader_phone +
-//                " WHERE " + ReadersEntry.COLUMN_READER_ID + " = " + Integer.parseInt(selected_reader_id) +
-//                ";";
         SQLiteDatabase db = readersDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ReadersEntry.COLUMN_READER_FIRST_NAME, first_name.getText().toString().trim());
@@ -246,6 +191,56 @@ public class NewReaderActivity extends AppCompatActivity {
         if (newRowID == -1 || newSubRowID == -1) {
             Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void datePickers() {
+        date_of_birth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(NewReaderActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        datePicker,
+                        year, month, day);
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.show();
+            }
+        });
+        datePicker = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month = month + 1;
+                String date = year + "-" + month + "-" + dayOfMonth;
+                date_of_birth.setText(date);
+            }
+        };
+
+        sub_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(NewReaderActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        datePicker2,
+                        year, month, day);
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.show();
+            }
+        });
+        datePicker2 = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month = month + 1;
+                String date = year + "-" + month + "-" + dayOfMonth;
+                sub_date.setText(date);
+            }
+        };
     }
 
 }

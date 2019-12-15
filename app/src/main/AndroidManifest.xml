@@ -15,7 +15,6 @@
         <activity android:name=".NewBookActivity"></activity>
         <activity android:name=".NewReaderActivity" />
         <activity android:name=".NewEmployeeActivity" />
-        <activity android:name=".RenewActivity" />
         <activity android:name=".ShowDetails" />
         <activity android:name=".ShowEmployees" />
         <activity android:name=".ShowReaders" />

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -90,9 +91,9 @@ public class ShowReaders extends AppCompatActivity {
                         + "حالة الاشتراك: " + selected_reader_sub_status;
 
                 openDialog(info);
+                cursor.close();
             }
         });
-        cursor.close();
 
         search_edtxt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -124,9 +125,6 @@ public class ShowReaders extends AppCompatActivity {
     }
 
     private void openDialog(String info) {
-//        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("معلومات المشترك: \n\n" + info).show();
-//        TextView textView = (TextView) dialog.findViewById(android.R.id.message);
-//        textView.setTextSize(20);
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.reader_dialog);
         TextView tv_info = dialog.findViewById(R.id.textView_display_reader_info);
@@ -161,6 +159,20 @@ public class ShowReaders extends AppCompatActivity {
             }
         });
         dialog.show();
+        // clear attributes when dialog dismissed
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                selected_reader_id = "";
+                selected_reader_first_name = "";
+                selected_reader_last_name = "";
+                selected_reader_date_of_birth = "";
+                selected_reader_gender = "";
+                selected_reader_phone = "";
+                selected_reader_address = "";
+                selected_reader_sub_date = "";
+            }
+        });
     }
 
     private void renew_subscription() {

@@ -1,8 +1,9 @@
 package com.example.dbproject;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +37,15 @@ public class ShowEmployees extends AppCompatActivity {
     Cursor cursor;
 
     EditText search_edtxt;
+    public static String selected_employee_id = "";
+    public static String selected_employee_first_name = "";
+    public static String selected_employee_last_name = "";
+    public static String selected_employee_address = "";
+    public static String selected_employee_branch_id = "";
+    public static String selected_employee_hire_date = "";
+    public static String selected_employee_phone = "";
+    public static String selected_employee_email = "";
+    public static String selected_employee_position = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +66,25 @@ public class ShowEmployees extends AppCompatActivity {
                 String select_readers_query = "SELECT * FROM " + EmployeesEntry.TABLE_NAME + " ORDER BY " + EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " ASC";
                 cursor = db.rawQuery(select_readers_query, null);
                 cursor.moveToPosition(position);
-                String info = "رقم الموظف: " + cursor.getInt(0) + "\n"
-                        + "اسم الموظف: " + cursor.getString(1) + " " + cursor.getString(2) + "\n"
-                        + "العنوان: " + cursor.getString(3) + "\n"
-                        + "رقم الفرع: " + cursor.getInt(4) + "\n"
-                        + "تاريخ التوظيف: " + cursor.getString(5) + "\n"
-                        + "البريد اﻹلكتروني: " + cursor.getString(6) + "\n"
-                        + "الهاتف: " + cursor.getInt(7) + "\n"
-                        + "المنصب: " + cursor.getString(8) + "\n";
+                //Give values to static attributes to use them if edit button clicked
+                selected_employee_id = cursor.getInt(0) + "";
+                selected_employee_first_name = cursor.getString(1);
+                selected_employee_last_name = cursor.getString(2);
+                selected_employee_address = cursor.getString(3);
+                selected_employee_branch_id = cursor.getInt(4) + "";
+                selected_employee_hire_date = cursor.getString(5);
+                selected_employee_email = cursor.getString(6);
+                selected_employee_phone = cursor.getInt(7) + "";
+                selected_employee_position = cursor.getString(8);
+
+                String info = "رقم الموظف: " + selected_employee_id + "\n"
+                        + "اسم الموظف: " + selected_employee_first_name + " " + selected_employee_last_name + "\n"
+                        + "العنوان: " + selected_employee_address + "\n"
+                        + "رقم الفرع: " + selected_employee_branch_id + "\n"
+                        + "تاريخ التوظيف: " + selected_employee_hire_date + "\n"
+                        + "البريد اﻹلكتروني: " + selected_employee_email + "\n"
+                        + "الهاتف: " + selected_employee_phone + "\n"
+                        + "المنصب: " + selected_employee_position + "\n";
                 openDialog(info);
                 cursor.close();
             }
@@ -75,7 +97,7 @@ public class ShowEmployees extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!search_edtxt.getText().toString().isEmpty()){
+                if (!search_edtxt.getText().toString().isEmpty()) {
                     String select_where = "SELECT * FROM " + EmployeesEntry.TABLE_NAME + " WHERE " + EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " || ' '" + " || " + EmployeesEntry.COLUMN_EMPLOYEE_LAST_NAME + " LIKE '%" + search_edtxt.getText().toString() + "%'";
                     Cursor search_cursor = db.rawQuery(select_where, null);
                     ArrayList<String> listItem_search = new ArrayList<>();
@@ -86,7 +108,7 @@ public class ShowEmployees extends AppCompatActivity {
                     employees_list.setAdapter(adapter_search);
                     search_cursor.close();
                     System.out.println(search_cursor.getCount() + "\t" + listItem_search.size());
-                }else{
+                } else {
                     employees_list.setAdapter(adapter);
                 }
             }
@@ -102,23 +124,58 @@ public class ShowEmployees extends AppCompatActivity {
     }
 
     private void openDialog(String info) {
-        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("معلومات الموظف: \n\n" + info).show();
-        TextView textView = (TextView) dialog.findViewById(android.R.id.message);
-        textView.setTextSize(20);
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.employee_dialog);
+        TextView tv_info = dialog.findViewById(R.id.textView_display_employee_info);
+        Button btn_remove = dialog.findViewById(R.id.btn_remove_employee);
+        Button btn_edit = dialog.findViewById(R.id.btn_edit_employee_info);
+        //display data
+        tv_info.setText(info);
+        btn_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String remove_employee_query = "DELETE FROM " + EmployeesEntry.TABLE_NAME + " WHERE " + EmployeesEntry.ID + " = " + Integer.parseInt(selected_employee_id);
+                db.execSQL(remove_employee_query);
+                Toast.makeText(getApplicationContext(), "تم حذف الموظف", Toast.LENGTH_SHORT).show();
+                listItem.clear();
+                viewData();
+                dialog.dismiss();
+            }
+        });
+        btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ShowEmployees.this, NewEmployeeActivity.class));
+            }
+        });
+        dialog.show();
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                selected_employee_id = "";
+                selected_employee_first_name = "";
+                selected_employee_last_name = "";
+                selected_employee_address = "";
+                selected_employee_branch_id = "";
+                selected_employee_phone = "";
+                selected_employee_position = "";
+                selected_employee_email = "";
+                selected_employee_hire_date = "";
+            }
+        });
     }
 
     public void viewData() {
         String select_employees_query = "SELECT * FROM " + EmployeesEntry.TABLE_NAME + " ORDER BY " + EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " ASC";
         cursor = db.rawQuery(select_employees_query, null);
-
+        while (cursor.moveToNext()) {
+            listItem.add(cursor.getString(1) + " " + cursor.getString(2));
+        }
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
+        employees_list.setAdapter(adapter);
         if (cursor.getCount() == 0) {
             Toast.makeText(getApplicationContext(), "NO EMPLOYEES", Toast.LENGTH_SHORT).show();
-        } else {
-            while (cursor.moveToNext()) {
-                listItem.add(cursor.getString(1) + " " + cursor.getString(2));
-            }
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
-            employees_list.setAdapter(adapter);
         }
         cursor.close();
     }

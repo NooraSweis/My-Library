@@ -47,7 +47,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.8" />
 
         </LinearLayout>
 
@@ -85,7 +85,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.8" />
 
         </LinearLayout>
 
@@ -130,7 +130,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.8" />
 
         </LinearLayout>
 
@@ -166,7 +166,7 @@
                 android:layout_weight="2.8"
                 android:background="#A38177"
                 android:fontFamily="@font/nefel_adeti"
-                android:text="Branch ID"
+                android:text="رقم الفرع"
                 android:textAlignment="center"
                 android:textSize="25sp"
                 android:textStyle="bold" />
@@ -174,7 +174,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.8" />
 
         </LinearLayout>
 
@@ -212,7 +212,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.8" />
 
         </LinearLayout>
 
@@ -251,7 +251,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.8" />
 
 
         </LinearLayout>
@@ -297,7 +297,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.8" />
 
         </LinearLayout>
 
@@ -341,7 +341,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.8" />
 
         </LinearLayout>
 
@@ -379,7 +379,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.8" />
 
         </LinearLayout>
 
@@ -399,7 +399,7 @@
                 android:layout_weight="0.7" />
 
             <Button
-                android:id="@+id/button_reader_cancel"
+                android:id="@+id/button_employee_cancel"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -415,12 +415,11 @@
                 android:layout_weight="0.7" />
 
             <Button
-                android:id="@+id/button_reader_save"
+                android:id="@+id/button_employee_save"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/custom_button_renew"
-                android:onClick="add_employee"
                 android:text="@string/save"
                 android:textColor="#A38177"
                 android:textSize="20sp" />
