@@ -188,6 +188,8 @@ public class NewReaderActivity extends AppCompatActivity {
     private void insertData() {
         SQLiteDatabase db = readersDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
+        String[] date = date_of_birth.getText().toString().trim().split("-");
+
         values.put(ReadersEntry.COLUMN_READER_ID, Integer.parseInt(ID.getText().toString().trim()));
         values.put(ReadersEntry.COLUMN_READER_FIRST_NAME, first_name.getText().toString().trim());
         values.put(ReadersEntry.COLUMN_READER_LAST_NAME, last_name.getText().toString().trim());
@@ -221,7 +223,7 @@ public class NewReaderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH) + 1;
+                int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(NewReaderActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
@@ -234,7 +236,7 @@ public class NewReaderActivity extends AppCompatActivity {
         datePicker = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = year + "-" + month + "-" + dayOfMonth;
+                String date = year + "-" + month+1 + "-" + dayOfMonth;
                 date_of_birth.setText(date);
             }
         };
@@ -244,7 +246,7 @@ public class NewReaderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH) + 1;
+                int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(NewReaderActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
@@ -257,7 +259,7 @@ public class NewReaderActivity extends AppCompatActivity {
         datePicker2 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = year + "-" + month + "-" + dayOfMonth;
+                String date = year + "-" + month+1 + "-" + dayOfMonth;
                 sub_date.setText(date);
             }
         };

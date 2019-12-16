@@ -197,7 +197,7 @@ public class NewEmployeeActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month = month + 1;
-                String date = year + "-" + month + "-" + dayOfMonth;
+                String date = year + "-" + month+1 + "-" + dayOfMonth;
                 hire_date.setText(date);
             }
         };

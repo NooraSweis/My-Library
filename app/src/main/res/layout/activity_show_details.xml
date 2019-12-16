@@ -31,10 +31,10 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
-            android:text="عرض"
+            android:text="                       عرض                        "
             android:textColor="#A38177"
             android:textSize="20sp"
-            android:onClick="show_borrowed_books"/>
+            />
 
         <TextView
             android:layout_width="match_parent"
@@ -48,14 +48,16 @@
             android:layout_marginBottom="10dp"/>
 
         <Button
+            android:id="@+id/btn_show_books_must_return"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
-            android:text="عرض"
+            android:text="                       عرض                        "
             android:textColor="#A38177"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:onClick="show_books_must_return"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -74,7 +76,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
-            android:text="عرض"
+            android:text="                       عرض                        "
             android:textColor="#A38177"
             android:textSize="20sp" />
 
@@ -95,7 +97,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
-            android:text="عرض"
+            android:text="                       عرض                        "
             android:textColor="#A38177"
             android:textSize="20sp" />
 
@@ -116,7 +118,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
-            android:text="عرض"
+            android:text="                       عرض                        "
             android:textColor="#A38177"
             android:textSize="20sp" />
     </LinearLayout>

@@ -166,6 +166,7 @@ public class ShowBooks extends AppCompatActivity {
         Button borrow = selected_book_dialog.findViewById(R.id.btn_book_borrow);
         Button add_copy = selected_book_dialog.findViewById(R.id.btn_add_book_copy);
         Button remove_copy = selected_book_dialog.findViewById(R.id.btn_remove_book_copy);
+        Button return_copy = selected_book_dialog.findViewById(R.id.btn_book_return);
 
         if (selected_book_number_of_copies.equals("0")) {
             remove_copy.setEnabled(false);
@@ -190,16 +191,42 @@ public class ShowBooks extends AppCompatActivity {
         remove_copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                remove_one_copy();
-                Toast.makeText(getApplicationContext(), "تم حذف نسخة", Toast.LENGTH_LONG).show();
-                selected_book_dialog.dismiss();
+                remove_one_copy(selected_book_dialog);
             }
         });
 
         borrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                open_borrow_dialog();
+                open_borrow_dialog(selected_book_dialog);
+            }
+        });
+
+        return_copy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog d = new Dialog(ShowBooks.this);
+                // رح نستخدم نفس ديالوج الحذف لأنه ما بدنا غير رقم النسخة
+                d.setContentView(R.layout.remove_book_dialog);
+                final EditText copy_id = d.findViewById(R.id.edtxt_remove_copy_id);
+                Button ok = d.findViewById(R.id.btn_remove_ok);
+                d.show();
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (copy_is_borrowed(copy_id.getText().toString().trim())) {
+                            String query = "UPDATE reader_request SET return_date = '" + getCurrentDate() + "' WHERE book_id = "
+                                    + selected_book_id + " AND copy_id = " + copy_id.getText().toString().trim();
+                            SQLiteDatabase database = bookDBHelper.getWritableDatabase();
+                            database.execSQL(query);
+                            Toast.makeText(getApplicationContext(), "تمت إعادة الكتاب", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "تأكد من الرقم المدخل", Toast.LENGTH_LONG).show();
+                        }
+                        d.dismiss();
+                        selected_book_dialog.dismiss();
+                    }
+                });
             }
         });
 
@@ -221,7 +248,7 @@ public class ShowBooks extends AppCompatActivity {
         });
     }
 
-    private void open_borrow_dialog() {
+    private void open_borrow_dialog(final Dialog selected_book_dialog) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.borrow_dialog);
         final EditText reader_id = dialog.findViewById(R.id.edtxt_reader_borrowing_id);
@@ -235,13 +262,13 @@ public class ShowBooks extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 insert_into_reader_request(reader_id.getText().toString().trim(),
-                        copy_id.getText().toString().trim(), res_employee.getText().toString().trim());
+                        copy_id.getText().toString().trim(), res_employee.getText().toString().trim(), selected_book_dialog);
                 dialog.dismiss();
             }
         });
     }
 
-    private void insert_into_reader_request(String reader_id, String copy_id, String res_employee) {
+    private void insert_into_reader_request(String reader_id, String copy_id, String res_employee, Dialog selected_book_dialog) {
         SQLiteDatabase database = bookDBHelper.getWritableDatabase();
         //get current date
         Calendar cal = Calendar.getInstance();
@@ -265,6 +292,7 @@ public class ShowBooks extends AppCompatActivity {
             try {
                 database.insert(ReaderRequestEntry.TABLE_NAME, null, values);
                 Toast.makeText(getApplicationContext(), "تمت استعارة الكتاب", Toast.LENGTH_LONG).show();
+                selected_book_dialog.dismiss();
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "حدث خطأ ما", Toast.LENGTH_LONG).show();
                 System.out.println("EXC OCCUR");
@@ -277,9 +305,9 @@ public class ShowBooks extends AppCompatActivity {
     private boolean reader_sub_ended(String id) {
         String query = "SELECT " + ReadersEntry.COLUMN_READER_SUB_STATUS + " FROM " + ReadersEntry.TABLE_NAME
                 + " WHERE " + ReadersEntry.COLUMN_READER_ID + " = " + id;
-        Cursor cursor = db.rawQuery(query,null);
+        Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
-        if(cursor.getCount() == 0 || cursor.getString(0).equals("منتهٍ")){
+        if (cursor.getCount() == 0 || cursor.getString(0).equals("منتهٍ")) {
             return true;
         }
         return false;
@@ -301,16 +329,42 @@ public class ShowBooks extends AppCompatActivity {
     }
 
 
-    private void remove_one_copy() {
-        SQLiteDatabase database = bookDBHelper.getWritableDatabase();
-        String delete_query = "DELETE FROM " + BookCopiesEntry.TABLE_NAME + " WHERE " + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
-                + " = " + Integer.parseInt(selected_book_id) + " AND " + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID
-                + " = " + Integer.parseInt(selected_book_number_of_copies) + ";";
-        database.execSQL(delete_query);
-        selected_book_number_of_copies = (Integer.parseInt(selected_book_number_of_copies) - 1) + "";
-        String update_query = "UPDATE " + BooksEntry.TABLE_NAME + " SET " + BooksEntry.COLUMN_BOOK_NUMBER_OF_COPIES
-                + " = " + Integer.parseInt(selected_book_number_of_copies) + ";";
-        database.execSQL(update_query);
+    private void remove_one_copy(final Dialog selected_book_dialog) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.remove_book_dialog);
+        final EditText copy_id = dialog.findViewById(R.id.edtxt_remove_copy_id);
+        Button ok = dialog.findViewById(R.id.btn_remove_ok);
+        dialog.show();
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (copy_exists(copy_id.getText().toString().trim())) {
+                    SQLiteDatabase database = bookDBHelper.getWritableDatabase();
+                    String delete_query = "DELETE FROM " + BookCopiesEntry.TABLE_NAME + " WHERE " + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
+                            + " = " + Integer.parseInt(selected_book_id) + " AND " + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID
+                            + " = " + Integer.parseInt(copy_id.getText().toString().trim()) + ";";
+                    database.execSQL(delete_query);
+                    selected_book_number_of_copies = (Integer.parseInt(selected_book_number_of_copies) - 1) + "";
+                    String update_query = "UPDATE " + BooksEntry.TABLE_NAME + " SET " + BooksEntry.COLUMN_BOOK_NUMBER_OF_COPIES
+                            + " = " + Integer.parseInt(selected_book_number_of_copies) + ";";
+                    database.execSQL(update_query);
+                    Toast.makeText(getApplicationContext(), "تم حذف نسخة", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "النسخة غير موجودة", Toast.LENGTH_LONG).show();
+                }
+                selected_book_dialog.dismiss();
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private boolean copy_exists(String copy_id) {
+        String query = "SELECT copy_id FROM book_copies WHERE book_id = " + selected_book_id + " AND copy_id = " + copy_id;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() == 0) {
+            return false;
+        }
+        return true;
     }
 
     private void add_new_copy(Dialog dialog) {
@@ -375,7 +429,6 @@ public class ShowBooks extends AppCompatActivity {
             }
         });
         dialog.show();
-
     }
 
     private void add_one_to_number_of_copies() {
@@ -397,5 +450,23 @@ public class ShowBooks extends AppCompatActivity {
         }
         cursor.moveToLast();
         return cursor.getInt(0) + 1;
+    }
+
+    private boolean copy_is_borrowed(String copy_id) {
+        String query = "SELECT * from reader_request WHERE book_id = " + selected_book_id + " AND copy_id = " + copy_id
+                + " AND return_date IS NULL";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    private String getCurrentDate() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        return year + "-" + month + "-" + day;
     }
 }

@@ -13,9 +13,6 @@ import com.example.dbproject.data.LibraryContract.ReadersEntry;
 import com.example.dbproject.data.LibraryContract.SubscriptionsEntry;
 import com.example.dbproject.data.LibraryContract.ReaderRequestEntry;
 
-import java.util.Calendar;
-
-
 public class DBconnections extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
@@ -158,8 +155,20 @@ public class DBconnections extends SQLiteOpenHelper {
     }
 
     private void insertDefaultRecordsToReaderRequests(SQLiteDatabase db) {
-        String insert_request = "INSERT INTO " + LibraryContract.ReaderRequestEntry.TABLE_NAME
-                + " VALUES (100,1000,1000,1,'2019-12-10', '2019-12-15',1000);";
+        String insert_request = "INSERT INTO " + ReaderRequestEntry.TABLE_NAME
+                + " VALUES (100,1000,1000,1,'2019-12-10', null,1000);";
+        db.execSQL(insert_request);
+        insert_request = "INSERT INTO " + ReaderRequestEntry.TABLE_NAME
+                + " VALUES (101,1001,1001,1,'2019-12-02', null,1000);";
+        db.execSQL(insert_request);
+        insert_request = "INSERT INTO " + ReaderRequestEntry.TABLE_NAME
+                + " VALUES (102,1009,1001,2,'2019-12-02', null,1000);";
+        db.execSQL(insert_request);
+        insert_request = "INSERT INTO " + ReaderRequestEntry.TABLE_NAME
+                + " VALUES (103,1002,1002,2,'2019-12-02', null,1000);";
+        db.execSQL(insert_request);
+        insert_request = "INSERT INTO " + ReaderRequestEntry.TABLE_NAME
+                + " VALUES (104,1003,1002,1,'2019-12-05', null,1000);";
         db.execSQL(insert_request);
     }
 
