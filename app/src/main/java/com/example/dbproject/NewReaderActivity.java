@@ -147,7 +147,8 @@ public class NewReaderActivity extends AppCompatActivity {
         String current_date = year + "-" + month + "-" + day;
 
         SQLiteDatabase db = readersDBHelper.getWritableDatabase();
-        db.execSQL("CREATE TRIGGER IF NOT EXISTS update_reader AFTER UPDATE ON " + ReadersEntry.TABLE_NAME + " BEGIN INSERT INTO "
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS update_reader AFTER UPDATE ON " + ReadersEntry.TABLE_NAME
+                + " BEGIN INSERT INTO "
                 + UpdatedReadersEntry.TABLE_NAME + " VALUES ("
                 + selected_reader_id + ", "
                 + current_date + ", "

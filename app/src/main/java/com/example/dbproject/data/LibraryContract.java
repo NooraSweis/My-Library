@@ -116,4 +116,10 @@ public final class LibraryContract {
         public final static String NEW_GENDER = "new_gender";
         public final static String NEW_PHONE = "new_phone";
     }
+
+    public static final class UpdatedCopies implements BaseColumns{
+
+        public final static String TABLE_NAME = "updated_copies";
+
+    }
 }
