@@ -94,4 +94,26 @@ public final class LibraryContract {
         public final static String COLUMN_SUBSCRIPTIONS_END_DATE = "end_date";
         public final static String COLUMN_SUBSCRIPTIONS_STATUS = "status";
     }
+
+    public static final class UpdatedReadersEntry implements BaseColumns {
+
+        public final static String TABLE_NAME = "updated_reader";
+
+        public final static String UPDATED_READER_ID = "updated_reader_id";
+
+        public final static String DATE_OF_UPDATE = "date_of_update";
+        public final static String OLD_FIRST_NAME = "old_first_name";
+        public final static String OLD_LAST_NAME = "old_last_name";
+        public final static String OLD_DATE_OF_BIRTH = "old_date_of_birth";
+        public final static String OLD_ADDRESS = "old_address";
+        public final static String OLD_GENDER = "old_gender";
+        public final static String OLD_PHONE = "old_phone";
+
+        public final static String NEW_FIRST_NAME = "new_first_name";
+        public final static String NEW_LAST_NAME = "new_last_name";
+        public final static String NEW_DATE_OF_BIRTH = "new_date_of_birth";
+        public final static String NEW_ADDRESS = "new_address";
+        public final static String NEW_GENDER = "new_gender";
+        public final static String NEW_PHONE = "new_phone";
+    }
 }

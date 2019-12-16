@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dbproject.data.DBconnections;
+import com.example.dbproject.data.LibraryContract;
 import com.example.dbproject.data.LibraryContract.BooksEntry;
 
 import static com.example.dbproject.ShowBooks.selected_book_id;
@@ -25,10 +26,11 @@ import static com.example.dbproject.ShowBooks.selected_book_author;
 import static com.example.dbproject.ShowBooks.selected_book_category;
 import static com.example.dbproject.ShowBooks.selected_book_branch_id;
 import static com.example.dbproject.ShowBooks.selected_book_number_of_copies;
+import static com.example.dbproject.ShowReaders.selected_reader_id;
 
 public class NewBookActivity extends AppCompatActivity {
 
-    DBconnections BookDBHelper;
+    DBconnections bookDBHelper;
 
     EditText book_title;
     TextView ID;
@@ -45,7 +47,7 @@ public class NewBookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_book);
 
-        BookDBHelper = new DBconnections(this);
+        bookDBHelper = new DBconnections(this);
         book_title = (EditText) findViewById(R.id.edtxt_book_name);
         ID = findViewById(R.id.edtxt_book_id);
         publish_date = (EditText) findViewById(R.id.edtxt_publication_date);
@@ -67,6 +69,9 @@ public class NewBookActivity extends AppCompatActivity {
             branch_id.setText(selected_book_branch_id);
             num_copies.setText(selected_book_number_of_copies);
             category.setText(selected_book_category);
+
+            ID.setEnabled(false);
+            num_copies.setEnabled(false);
         }
 
         // when save button pressed, check if data will be added or updated
@@ -76,12 +81,35 @@ public class NewBookActivity extends AppCompatActivity {
                 if (selected_book_id.isEmpty()) {
                     add_book();
                 } else {
-                   // update_book();
+                    update_book();
                     Toast.makeText(getApplicationContext(), "تم التعديل", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(NewBookActivity.this, ShowBooks.class));
                 }
             }
         });
+    }
+
+    private void update_book() {
+        SQLiteDatabase db = bookDBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(BooksEntry.COLUMN_BOOK_TITLE, book_title.getText().toString().trim());
+        values.put(BooksEntry.COLUMN_BOOK_PUBLICATION_DATE, publish_date.getText().toString().trim());
+        values.put(BooksEntry.COLUMN_BOOK_PUBLICATION_HOUSE, publish_house.getText().toString().trim());
+        values.put(BooksEntry.COLUMN_BOOK_AUTHOR, author.getText().toString().trim());
+        values.put(BooksEntry.COLUMN_BOOK_CATEGORY, category.getText().toString().trim());
+        values.put(BooksEntry.COLUMN_BOOK_BRANCH_ID, branch_id.getText().toString().trim());
+
+        db.update(BooksEntry.TABLE_NAME, values, "ID = ?", new String[]{selected_book_id});
+        ID.setEnabled(true);
+        num_copies.setEnabled(true);
+        selected_book_id = "";
+        selected_book_title = "";
+        selected_book_pub_date = "";
+        selected_book_pub_house = "";
+        selected_book_author = "";
+        selected_book_category = "";
+        selected_book_branch_id = "";
+        selected_book_number_of_copies = "";
     }
 
     private void setNewID() {
@@ -92,7 +120,7 @@ public class NewBookActivity extends AppCompatActivity {
         if (cursor.getCount() != 0) {
             cursor.moveToLast();
             ID.setText((cursor.getInt(0) + 1) + "");
-        }else {
+        } else {
             ID.setText("1000");
         }
         System.out.println("new ID generated");
@@ -114,7 +142,7 @@ public class NewBookActivity extends AppCompatActivity {
     }
 
     private void insertData() {
-        SQLiteDatabase db = BookDBHelper.getWritableDatabase();
+        SQLiteDatabase db = bookDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(BooksEntry.COLUMN_BOOK_TITLE, book_title.getText().toString().trim());
         values.put(BooksEntry.COLUMN_BOOK_PUBLICATION_HOUSE, publish_house.getText().toString().trim());

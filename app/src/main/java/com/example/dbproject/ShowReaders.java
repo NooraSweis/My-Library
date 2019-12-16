@@ -171,6 +171,7 @@ public class ShowReaders extends AppCompatActivity {
                 selected_reader_phone = "";
                 selected_reader_address = "";
                 selected_reader_sub_date = "";
+                selected_reader_sub_status = "";
             }
         });
     }

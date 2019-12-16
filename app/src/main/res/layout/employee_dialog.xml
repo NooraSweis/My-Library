@@ -5,10 +5,12 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout_employee_dialog"
         android:layout_width="match_parent"
         android:layout_height="80dp">
 
         <TextView
+            android:id="@+id/textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

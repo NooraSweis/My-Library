@@ -4,12 +4,17 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.dbproject.data.LibraryContract.UpdatedReadersEntry;
 import com.example.dbproject.data.LibraryContract.BookCopiesEntry;
 import com.example.dbproject.data.LibraryContract.BooksEntry;
 import com.example.dbproject.data.LibraryContract.BranchesEntry;
 import com.example.dbproject.data.LibraryContract.EmployeesEntry;
 import com.example.dbproject.data.LibraryContract.ReadersEntry;
 import com.example.dbproject.data.LibraryContract.SubscriptionsEntry;
+import com.example.dbproject.data.LibraryContract.ReaderRequestEntry;
+
+import java.util.Calendar;
+
 
 public class DBconnections extends SQLiteOpenHelper {
 
@@ -72,20 +77,23 @@ public class DBconnections extends SQLiteOpenHelper {
                 + ");";
         db.execSQL(SQL_CREATE_EMPLOYEES_TABLE);
 
-        String SQL_CREATE_READER_REQUESTS_TABLE = "CREATE TABLE " + LibraryContract.ReaderRequestEntry.TABLE_NAME + "("
-                + LibraryContract.ReaderRequestEntry.COLUMN_Request_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + LibraryContract.ReaderRequestEntry.COLUMN_Request_READER_ID + " INTEGER NOT NULL, "
-                + LibraryContract.ReaderRequestEntry.COLUMN_Request_BOOK_ID + " INTEGER NOT NULL, "
-                + LibraryContract.ReaderRequestEntry.COLUMN_Request_COPY_ID + " INTEGER NOT NULL, "
-                + LibraryContract.ReaderRequestEntry.COLUMN_Request_DATE + " TEXT NOT NULL, "
-                + LibraryContract.ReaderRequestEntry.COLUMN_Request_RETURN_DATE + " TEXT NOT NULL, "
-                + LibraryContract.ReaderRequestEntry.COLUMN_Request_RES_EMPLOYEE + " INTEGER NOT NULL, " +
-                "FOREIGN KEY (" + LibraryContract.ReaderRequestEntry.COLUMN_Request_READER_ID
-                + ") REFERENCES " + LibraryContract.ReadersEntry.TABLE_NAME + " ("
-                + LibraryContract.ReadersEntry.COLUMN_READER_ID + "), "
-                + "FOREIGN KEY (" + LibraryContract.ReaderRequestEntry.COLUMN_Request_BOOK_ID
-                + ") REFERENCES " + LibraryContract.BooksEntry.TABLE_NAME + " ("
-                + LibraryContract.BooksEntry.COLUMN_BOOK_ID + ")"
+        String SQL_CREATE_READER_REQUESTS_TABLE = "CREATE TABLE " + ReaderRequestEntry.TABLE_NAME + "("
+                + ReaderRequestEntry.COLUMN_Request_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ReaderRequestEntry.COLUMN_Request_READER_ID + " INTEGER NOT NULL, "
+                + ReaderRequestEntry.COLUMN_Request_BOOK_ID + " INTEGER NOT NULL, "
+                + ReaderRequestEntry.COLUMN_Request_COPY_ID + " INTEGER NOT NULL, "
+                + ReaderRequestEntry.COLUMN_Request_DATE + " TEXT NOT NULL, "
+                + ReaderRequestEntry.COLUMN_Request_RETURN_DATE + " TEXT, "
+                + ReaderRequestEntry.COLUMN_Request_RES_EMPLOYEE + " INTEGER NOT NULL, " +
+                "FOREIGN KEY (" + ReaderRequestEntry.COLUMN_Request_READER_ID
+                + ") REFERENCES " + ReadersEntry.TABLE_NAME + " ("
+                + ReadersEntry.COLUMN_READER_ID + "), "
+                + "FOREIGN KEY (" + ReaderRequestEntry.COLUMN_Request_COPY_ID
+                + ") REFERENCES " + BookCopiesEntry.TABLE_NAME + " ("
+                + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + "), "
+                + "FOREIGN KEY (" + ReaderRequestEntry.COLUMN_Request_BOOK_ID
+                + ") REFERENCES " + BooksEntry.TABLE_NAME + " ("
+                + BooksEntry.COLUMN_BOOK_ID + ")"
                 + ");";
         db.execSQL(SQL_CREATE_READER_REQUESTS_TABLE);
 
@@ -123,6 +131,36 @@ public class DBconnections extends SQLiteOpenHelper {
         insertDefaultRecordsToBranches(db);
         insertDefaultRecordsToEmployees(db);
         insertDefaultRecordsToBooks(db);
+        insertDefaultRecordsToReaderRequests(db);
+
+        create_archive_table(db);
+    }
+
+    private void create_archive_table(SQLiteDatabase db) {
+        String SQL_CREATE_READERS_archives_TABLE = "CREATE TABLE " + UpdatedReadersEntry.TABLE_NAME + "("
+                + UpdatedReadersEntry.UPDATED_READER_ID + " INTEGER NOT NULL, "
+                + UpdatedReadersEntry.DATE_OF_UPDATE + " TEXT NOT NULL, "
+
+                + UpdatedReadersEntry.OLD_FIRST_NAME + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.OLD_LAST_NAME + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.OLD_DATE_OF_BIRTH + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.OLD_ADDRESS + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.OLD_GENDER + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.OLD_PHONE + " INTEGER NOT NULL, "
+
+                + UpdatedReadersEntry.NEW_FIRST_NAME + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.NEW_LAST_NAME + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.NEW_DATE_OF_BIRTH + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.NEW_ADDRESS + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.NEW_GENDER + " TEXT NOT NULL, "
+                + UpdatedReadersEntry.NEW_PHONE + " INTEGER NOT NULL);";
+        db.execSQL(SQL_CREATE_READERS_archives_TABLE);
+    }
+
+    private void insertDefaultRecordsToReaderRequests(SQLiteDatabase db) {
+        String insert_request = "INSERT INTO " + LibraryContract.ReaderRequestEntry.TABLE_NAME
+                + " VALUES (100,1000,1000,1,'2019-12-10', '2019-12-15',1000);";
+        db.execSQL(insert_request);
     }
 
     private void insertDefaultRecordsToBooks(SQLiteDatabase db) {
@@ -235,7 +273,7 @@ public class DBconnections extends SQLiteOpenHelper {
 
         insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1009, 'رامي', 'عمر', '1985-09-06', 'جنين', 'ذكر', 0596363654, 'فعال');";
         db.execSQL(insert_to_readers);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1009, '2019-09-19', '2019-09-19', 'فعال');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1009, '2019-09-19', '2020-09-19', 'فعال');";
         db.execSQL(insert_to_sub);
     }
 

@@ -15,7 +15,7 @@
             android:layout_height="30dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/green_arrow" />
+            android:background="@drawable/ic_arrow_upward_green_24dp" />
 
         <Button
             android:id="@+id/btn_remove_book_copy"
@@ -23,7 +23,7 @@
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/red_arrow" />
+            android:background="@drawable/ic_arrow_downward_red_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,7 +66,25 @@
             android:gravity="center"
             android:text="تعديل"
             android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/btn_book_return"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#D7237E13"
+            android:gravity="center"
+            android:text="إرجاع"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
         <Space
             android:layout_width="0dp"
@@ -82,7 +100,8 @@
             android:gravity="center"
             android:text="استعارة"
             android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
         <Space
             android:layout_width="0dp"

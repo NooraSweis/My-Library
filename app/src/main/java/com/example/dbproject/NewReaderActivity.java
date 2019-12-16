@@ -13,6 +13,8 @@ import android.os.Bundle;
 
 import com.example.dbproject.data.LibraryContract.ReadersEntry;
 import com.example.dbproject.data.LibraryContract.SubscriptionsEntry;
+import com.example.dbproject.data.LibraryContract.UpdatedReadersEntry;
+import com.example.dbproject.data.LibraryContract.EmployeesEntry;
 
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dbproject.data.DBconnections;
-import com.example.dbproject.data.LibraryContract;
 
 import static com.example.dbproject.ShowReaders.selected_reader_id;
 import static com.example.dbproject.ShowReaders.selected_reader_first_name;
@@ -113,6 +114,8 @@ public class NewReaderActivity extends AppCompatActivity {
     }
 
     private void update_reader() {
+        create_trigger();
+
         SQLiteDatabase db = readersDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ReadersEntry.COLUMN_READER_FIRST_NAME, first_name.getText().toString().trim());
@@ -135,10 +138,28 @@ public class NewReaderActivity extends AppCompatActivity {
         selected_reader_sub_date = "";
     }
 
+    private void create_trigger() {
+        //get current date
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        String current_date = year + "-" + month + "-" + day;
+
+        SQLiteDatabase db = readersDBHelper.getWritableDatabase();
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS update_reader AFTER UPDATE ON " + ReadersEntry.TABLE_NAME + " BEGIN INSERT INTO "
+                + UpdatedReadersEntry.TABLE_NAME + " VALUES ("
+                + selected_reader_id + ", "
+                + current_date + ", "
+                + "old.first_name, old.last_name, old.date_of_birth, old.address, old.gender, old.phone, "
+                + "new.first_name, new.last_name, new.date_of_birth, new.address, new.gender, new.phone"
+                + "); END;");
+    }
+
     private void setNewID() {
         DBconnections dbHelper = new DBconnections(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String select_readers_query = "SELECT " + ReadersEntry.COLUMN_READER_ID + " FROM " + ReadersEntry.TABLE_NAME + " ORDER BY " + LibraryContract.EmployeesEntry.ID + " ASC";
+        String select_readers_query = "SELECT " + ReadersEntry.COLUMN_READER_ID + " FROM " + ReadersEntry.TABLE_NAME + " ORDER BY " + EmployeesEntry.ID + " ASC";
         Cursor cursor = db.rawQuery(select_readers_query, null);
         cursor.moveToLast();
         ID.setText((cursor.getInt(0) + 1) + "");
@@ -175,7 +196,7 @@ public class NewReaderActivity extends AppCompatActivity {
         values.put(ReadersEntry.COLUMN_READER_PHONE, Integer.parseInt(phone.getText().toString().trim()));
         values.put(ReadersEntry.COLUMN_READER_SUB_STATUS, "فعال");
 
-        long newRowID = db.insert(LibraryContract.ReadersEntry.TABLE_NAME, null, values);
+        long newRowID = db.insert(ReadersEntry.TABLE_NAME, null, values);
 
         ContentValues sub_values = new ContentValues();
         // Get next year date
@@ -199,7 +220,7 @@ public class NewReaderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
+                int month = cal.get(Calendar.MONTH) + 1;
                 int day = cal.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(NewReaderActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
@@ -212,7 +233,6 @@ public class NewReaderActivity extends AppCompatActivity {
         datePicker = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
                 String date = year + "-" + month + "-" + dayOfMonth;
                 date_of_birth.setText(date);
             }
@@ -223,7 +243,7 @@ public class NewReaderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
+                int month = cal.get(Calendar.MONTH) + 1;
                 int day = cal.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(NewReaderActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
@@ -236,11 +256,9 @@ public class NewReaderActivity extends AppCompatActivity {
         datePicker2 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
                 String date = year + "-" + month + "-" + dayOfMonth;
                 sub_date.setText(date);
             }
         };
     }
-
 }
