@@ -16,7 +16,6 @@ import java.util.Calendar;
 
 import static com.example.dbproject.ShowBooks.selected_book_id;
 import static com.example.dbproject.ShowBooks.selected_book_title;
-import static com.example.dbproject.ShowBooks.selected_book_branch_id;
 import static com.example.dbproject.ShowBooks.selected_book_number_of_copies;
 import static com.example.dbproject.ShowBooks.selected_book_category;
 import static com.example.dbproject.ShowBooks.selected_book_pub_house;
@@ -111,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
         //book data
         selected_book_id = "";
         selected_book_title = "";
-        selected_book_branch_id = "";
         selected_book_number_of_copies = "";
         selected_book_category = "";
         selected_book_pub_house = "";

@@ -114,8 +114,6 @@ public class NewReaderActivity extends AppCompatActivity {
     }
 
     private void update_reader() {
-        create_trigger();
-
         SQLiteDatabase db = readersDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ReadersEntry.COLUMN_READER_FIRST_NAME, first_name.getText().toString().trim());
@@ -136,25 +134,6 @@ public class NewReaderActivity extends AppCompatActivity {
         selected_reader_phone = "";
         selected_reader_address = "";
         selected_reader_sub_date = "";
-    }
-
-    private void create_trigger() {
-        //get current date
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        String current_date = year + "-" + month + "-" + day;
-
-        SQLiteDatabase db = readersDBHelper.getWritableDatabase();
-        db.execSQL("CREATE TRIGGER IF NOT EXISTS update_reader AFTER UPDATE ON " + ReadersEntry.TABLE_NAME
-                + " BEGIN INSERT INTO "
-                + UpdatedReadersEntry.TABLE_NAME + " VALUES ("
-                + selected_reader_id + ", "
-                + current_date + ", "
-                + "old.first_name, old.last_name, old.date_of_birth, old.address, old.gender, old.phone, "
-                + "new.first_name, new.last_name, new.date_of_birth, new.address, new.gender, new.phone"
-                + "); END;");
     }
 
     private void setNewID() {
@@ -236,7 +215,7 @@ public class NewReaderActivity extends AppCompatActivity {
         datePicker = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = year + "-" + month+1 + "-" + dayOfMonth;
+                String date = year + "-" + (month+1) + "-" + dayOfMonth;
                 date_of_birth.setText(date);
             }
         };
@@ -259,7 +238,7 @@ public class NewReaderActivity extends AppCompatActivity {
         datePicker2 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = year + "-" + month+1 + "-" + dayOfMonth;
+                String date = year + "-" + (month+1) + "-" + dayOfMonth;
                 sub_date.setText(date);
             }
         };

@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ public class ShowBooks extends AppCompatActivity {
     public static String selected_book_number_of_copies = "";
     int reserved = 0;
     int book_id = 0;
+    public int b = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +88,7 @@ public class ShowBooks extends AppCompatActivity {
                 selected_book_pub_house = cursor.getString(3);
                 selected_book_author = cursor.getString(4);
                 selected_book_category = cursor.getString(5);
-                selected_book_branch_id = cursor.getInt(6) + "";
-                selected_book_number_of_copies = cursor.getInt(7) + "";
+                selected_book_number_of_copies = cursor.getInt(6) + "";
 
                 String info = "رقم الكتاب :" + selected_book_id + "\n"
                         + "اسم الكتاب : " + selected_book_title + "\n "
@@ -95,7 +96,6 @@ public class ShowBooks extends AppCompatActivity {
                         + "دار النشر : " + selected_book_pub_house + "\n"
                         + "المؤلف : " + selected_book_author + "\n"
                         + "فئة الكتاب : " + selected_book_category + "\n"
-                        + "الفرع :" + selected_book_branch_id + "\n"
                         + "عدد النسخ المتوفرة للاستعارة :" +
                         (Integer.parseInt(selected_book_number_of_copies) - get_number_of_borrowed_copies() -
                                 get_number_of_reserved_copies()) + "\n";
@@ -238,7 +238,6 @@ public class ShowBooks extends AppCompatActivity {
             public void onDismiss(DialogInterface dialog) {
                 selected_book_id = "";
                 selected_book_title = "";
-                selected_book_branch_id = "";
                 selected_book_number_of_copies = "";
                 selected_book_category = "";
                 selected_book_pub_house = "";
@@ -261,9 +260,13 @@ public class ShowBooks extends AppCompatActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insert_into_reader_request(reader_id.getText().toString().trim(),
-                        copy_id.getText().toString().trim(), res_employee.getText().toString().trim(), selected_book_dialog);
-                dialog.dismiss();
+                if (copy_available(Integer.parseInt(copy_id.getText().toString().trim()))) {
+                    insert_into_reader_request(reader_id.getText().toString().trim(),
+                            copy_id.getText().toString().trim(), res_employee.getText().toString().trim(), selected_book_dialog);
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(getApplicationContext(), "something wrong", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -319,8 +322,12 @@ public class ShowBooks extends AppCompatActivity {
                 + " AND " + ReaderRequestEntry.COLUMN_Request_COPY_ID + " = " + copy_id
                 + " AND " + ReaderRequestEntry.COLUMN_Request_RETURN_DATE + " IS NULL";
         Cursor cursor = db.rawQuery(query, null);
-        System.out.println(cursor.getCount());
-        if (cursor.getCount() == 0) {
+
+        String q2 = "SELECT copy_id FROM book_copies WHERE book_id = " + Integer.parseInt(selected_book_id)
+                + " AND copy_id = " + copy_id + " AND reserved = 0";
+        Cursor c2 = db.rawQuery(q2, null);
+
+        if (cursor.getCount() == 0 || c2.getCount() != 0) {
             System.out.println("COPY AVAILABLE");
             return true;
         }
@@ -399,8 +406,24 @@ public class ShowBooks extends AppCompatActivity {
     private void open_reserved_dialog() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.reserved_dialog);
+        final Spinner branch = dialog.findViewById(R.id.edtxt_new_copy_branch_id);
         final CheckBox reserved_chB = dialog.findViewById(R.id.checkbox_reserved);
         Button ok = dialog.findViewById(R.id.btn_ok_reserved_dialog);
+
+        //put branches values in spinner
+        String b_q = "SELECT ID FROM branches";
+        SQLiteDatabase db = bookDBHelper.getReadableDatabase();
+        Cursor b_cursor = db.rawQuery(b_q, null);
+        ArrayList<String> b_list = new ArrayList<>();
+        while (b_cursor.moveToNext()) {
+            b_list.add(b_cursor.getString(0));
+        }
+        b_cursor.close();
+        ArrayAdapter b_adapter = new ArrayAdapter(ShowBooks.this, android.R.layout.simple_spinner_item, b_list);
+        b_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        branch.setPrompt("اختر رقم النسخة");
+        branch.setAdapter(b_adapter);
+
         reserved_chB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -411,6 +434,18 @@ public class ShowBooks extends AppCompatActivity {
                 }
             }
         });
+
+        branch.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                b = Integer.parseInt(parent.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -419,9 +454,10 @@ public class ShowBooks extends AppCompatActivity {
                 } else {
                     reserved = 0;
                 }
+
                 SQLiteDatabase database = bookDBHelper.getWritableDatabase();
                 String insert_query = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES ("
-                        + book_id + ", " + get_new_copy_id(book_id) + ", " + reserved + ");";
+                        + book_id + ", " + get_new_copy_id(book_id) + ", " + b + ", " + reserved + ");";
                 database.execSQL(insert_query);
                 System.out.println(reserved);
                 dialog.dismiss();

@@ -27,27 +27,26 @@ public class DBconnections extends SQLiteOpenHelper {
         String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BooksEntry.TABLE_NAME + "("
                 + BooksEntry.COLUMN_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + BooksEntry.COLUMN_BOOK_TITLE + " TEXT NOT NULL, "
-                + BooksEntry.COLUMN_BOOK_PUBLICATION_DATE + " TEXT NOT NULL, "
+                + BooksEntry.COLUMN_BOOK_PUBLICATION_DATE + " TEXT, "
                 + BooksEntry.COLUMN_BOOK_PUBLICATION_HOUSE + " TEXT NOT NULL, "
                 + BooksEntry.COLUMN_BOOK_AUTHOR + " TEXT NOT NULL, "
                 + BooksEntry.COLUMN_BOOK_CATEGORY + " TEXT NOT NULL, "
-                + BooksEntry.COLUMN_BOOK_BRANCH_ID + " INTEGER NOT NULL, "
-                + BooksEntry.COLUMN_BOOK_NUMBER_OF_COPIES + " INTEGER NOT NULL, " +
-                "FOREIGN KEY (" + BooksEntry.COLUMN_BOOK_BRANCH_ID
-                + ") REFERENCES " + BranchesEntry.TABLE_NAME + " ("
-                + BranchesEntry.COLUMN_BRANCH_ID + ")"
+                + BooksEntry.COLUMN_BOOK_NUMBER_OF_COPIES + " INTEGER NOT NULL"
                 + ");";
         db.execSQL(SQL_CREATE_BOOKS_TABLE);
 
         String SQL_CREATE_BOOK_COPIES_TABLE = "CREATE TABLE " + BookCopiesEntry.TABLE_NAME + "("
                 + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID + " INTEGER NOT NULL, "
                 + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + " INTEGER NOT NULL, "
+                + BookCopiesEntry.COLUMN_BOOK_COPIES_BRANCH_ID + " INTEGER, "
                 + BookCopiesEntry.COLUMN_BOOK_COPIES_RESERVED + " INTEGER NOT NULL, "
                 + "PRIMARY KEY(\"" + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
                 + "\",\"" + BookCopiesEntry.COLUMN_BOOK_COPIES_COPY_ID + "\"),"
                 + "FOREIGN KEY (" + BookCopiesEntry.COLUMN_BOOK_COPIES_BOOK_ID
                 + ") REFERENCES " + BooksEntry.TABLE_NAME + " ("
-                + BooksEntry.COLUMN_BOOK_ID + ")"
+                + BooksEntry.COLUMN_BOOK_ID + "), "
+                + "FOREIGN KEY (" + BookCopiesEntry.COLUMN_BOOK_COPIES_BRANCH_ID + ") REFERENCES " + BranchesEntry.TABLE_NAME + " ("
+                + BranchesEntry.COLUMN_BRANCH_ID + ")"
                 + ");";
         db.execSQL(SQL_CREATE_BOOK_COPIES_TABLE);
 
@@ -63,7 +62,7 @@ public class DBconnections extends SQLiteOpenHelper {
                 + EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " TEXT NOT NULL, "
                 + EmployeesEntry.COLUMN_EMPLOYEE_LAST_NAME + " TEXT NOT NULL, "
                 + EmployeesEntry.COLUMN_EMPLOYEE_ADDRESS + " TEXT NOT NULL, "
-                + EmployeesEntry.COLUMN_EMPLOYEE_BRANCH_ID + " INTEGER NOT NULL, "
+                + EmployeesEntry.COLUMN_EMPLOYEE_BRANCH_ID + " INTEGER, "
                 + EmployeesEntry.COLUMN_EMPLOYEE_HIRE_DATE + " TEXT NOT NULL, "
                 + EmployeesEntry.COLUMN_EMPLOYEE_EMAIL + " TEXT NOT NULL, "
                 + EmployeesEntry.COLUMN_EMPLOYEE_PHONE + " INTEGER NOT NULL, "
@@ -121,6 +120,7 @@ public class DBconnections extends SQLiteOpenHelper {
                 + ");";
         db.execSQL(SQL_CREATE_SUB_TABLE);
 
+        create_triggers(db);
         /*
         Insert initial rows to the database
          */
@@ -173,51 +173,51 @@ public class DBconnections extends SQLiteOpenHelper {
     }
 
     private void insertDefaultRecordsToBooks(SQLiteDatabase db) {
-        String insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1000, 'أحياء حلب القديمة', '2006-12-03', 'وزارة الثقافة السورية', 'خير الدين الأسدي', 'التاريخ', 1, 1);";
+        String insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1000, 'أحياء حلب القديمة', '2006-12-13', 'وزارة الثقافة السورية', 'خير الدين الأسدي', 'التاريخ', 1);";
         db.execSQL(insert_to_books);
-        String insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1000, 1, 0);";
+        String insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1000, 1,1, 0);";
         db.execSQL(insert_to_copies);
 
-        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1001, 'أرض زيكولا', '2010-10-13', 'صرح للنشر والتوزيع', 'عمرو عبد الحميد', 'روايات وقصص أدبية', 1, 2);";
+        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1001, 'أرض زيكولا', '2010-11-13', 'صرح للنشر والتوزيع', 'عمرو عبد الحميد', 'روايات وقصص أدبية', 2);";
         db.execSQL(insert_to_books);
-        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1001, 1, 0);";
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1001, 1,1, 0);";
         db.execSQL(insert_to_copies);
-        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1001, 2, 0);";
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1001, 2,2, 0);";
         db.execSQL(insert_to_copies);
 
-        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1002, 'حديث الصباح', '2015-02-11', 'دار كلمات', 'أدهم الشرقاوي', 'روايات وقصص أدبية', 1, 2);";
+        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1002, 'حديث الصباح', '2015-12-11', 'دار كلمات', 'أدهم الشرقاوي', 'روايات وقصص أدبية', 2);";
         db.execSQL(insert_to_books);
-        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1002, 1, 0);";
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1002, 1,1, 0);";
         db.execSQL(insert_to_copies);
-        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1002, 2, 0);";
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1002, 2,1, 0);";
         db.execSQL(insert_to_copies);
 
-        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1003, 'أسرار عقل المليونير', '2017-11-23', 'جرير', 'هارف ايكر', 'تنمية', 1, 1);";
+        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1003, 'أسرار عقل المليونير', '2017-11-23', 'جرير', 'هارف ايكر', 'تنمية', 1);";
         db.execSQL(insert_to_books);
-        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1003, 1, 0);";
+        insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1003, 1,1, 0);";
         db.execSQL(insert_to_copies);
     }
 
     private void insertDefaultRecordsToEmployees(SQLiteDatabase db) {
-        String insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1000, 'أحمد', 'خالد', 'طولكرم', 1, '2014-02-12', 'ahmad@mylibrary.com', 0598765654, 'مدير');";
+        String insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1000, 'أحمد', 'خالد', 'طولكرم', 1, '2014-12-12', 'ahmad@mylibrary.com', 0598765654, 'مدير');";
         db.execSQL(insert_to_employees);
-        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1001, 'فاتن', 'محمد', 'طولكرم', 1, '2014-05-23', 'faten@mylibrary.com', 0596326451, 'مساعد');";
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1001, 'فاتن', 'محمد', 'طولكرم', 1, '2014-10-23', 'faten@mylibrary.com', 0596326451, 'مساعد');";
         db.execSQL(insert_to_employees);
-        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1002, 'بانا', 'علي', 'طولكرم', 1, '2014-04-12', 'bana@mylibrary.com', 0596874130, 'مساعد');";
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1002, 'بانا', 'علي', 'طولكرم', 1, '2014-11-12', 'bana@mylibrary.com', 0596874130, 'مساعد');";
         db.execSQL(insert_to_employees);
-        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1003, 'محمود', 'مهنا', 'طولكرم', 1, '2015-06-01', 'mahmoud@mylibrary.com', 0985656585, 'مساعد');";
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1003, 'محمود', 'مهنا', 'طولكرم', 1, '2015-12-11', 'mahmoud@mylibrary.com', 0985656585, 'مساعد');";
         db.execSQL(insert_to_employees);
         insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1004, 'أحمد', 'مجدي', 'نابلس',2, '2015-11-23', 'ahmad-m@mylibrary.com', 0236523623, 'مدير');";
         db.execSQL(insert_to_employees);
-        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1005, 'محمد', 'نور', 'نابلس', 2, '2015-12-14', 'mohammad@mylibrary.com', 0596656523, 'مساعد');";
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1005, 'محمد', 'نور', 'نابلس', 2, '2015-10-14', 'mohammad@mylibrary.com', 0596656523, 'مساعد');";
         db.execSQL(insert_to_employees);
-        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1006, 'عادل', 'راجح', 'رام الله', 2, '2016-02-28', 'adel@mylibrary.com', 0548779654, 'مساعد');";
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1006, 'عادل', 'راجح', 'رام الله', 2, '2016-12-28', 'adel@mylibrary.com', 0548779654, 'مساعد');";
         db.execSQL(insert_to_employees);
-        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1007, 'دينا', 'رائد', 'جنين', 3, '2017-09-10', 'dena@mylibrary.com', 0598595841, 'مدير');";
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1007, 'دينا', 'رائد', 'جنين', 3, '2017-11-10', 'dena@mylibrary.com', 0598595841, 'مدير');";
         db.execSQL(insert_to_employees);
-        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1008, 'أسيل', 'راشد', 'طولكرم', 3, '2017-09-12', 'aseel@mylibrary.com', 0595252456, 'مساعد');";
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1008, 'أسيل', 'راشد', 'طولكرم', 3, '2017-10-12', 'aseel@mylibrary.com', 0595252456, 'مساعد');";
         db.execSQL(insert_to_employees);
-        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1009, 'بهاء', 'فيصل', 'جنين', 3, '2019-10-03', 'bahaa@mylibrary.com', 0595654235, 'مساعد');";
+        insert_to_employees = "INSERT INTO " + EmployeesEntry.TABLE_NAME + " VALUES (1009, 'بهاء', 'فيصل', 'جنين', 3, '2019-10-30', 'bahaa@mylibrary.com', 0595654235, 'مساعد');";
         db.execSQL(insert_to_employees);
     }
 
@@ -233,31 +233,31 @@ public class DBconnections extends SQLiteOpenHelper {
     }
 
     private void insertDefaultRecordsToReaders(SQLiteDatabase db) {
-        String insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1000, 'نورا', 'صويص', '1999-09-11', 'طولكرم', 'أنثى', 0595483013, 'فعال');";
+        String insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1000, 'نورا', 'صويص', '1999-9-11', 'طولكرم', 'أنثى', 0595483013, 'فعال');";
         db.execSQL(insert_to_readers);
         String insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1000, '2019-12-12', '2020-12-12', 'فعال');";
         db.execSQL(insert_to_sub);
 
-        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1001, 'علا', 'تيسير', '1994-04-22', 'نابلس', 'أنثى', 0598765485, 'منتهٍ');";
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1001, 'علا', 'تيسير', '1994-4-22', 'نابلس', 'أنثى', 0598765485, 'منتهٍ');";
         db.execSQL(insert_to_readers);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1001, '2010-01-03', '2011-01-03', 'منتهٍ');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1001, '2010-1-3', '2011-1-3', 'منتهٍ');";
         db.execSQL(insert_to_sub);
 
-        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1002, 'رضا', 'حمدان', '1991-11-03', 'رام الله', 'ذكر', 0598763238, 'فعال');";
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1002, 'رضا', 'حمدان', '1991-11-3', 'رام الله', 'ذكر', 0598763238, 'فعال');";
         db.execSQL(insert_to_readers);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1002, '2019-08-11', '2020-08-11', 'فعال');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1002, '2019-8-11', '2020-8-11', 'فعال');";
         db.execSQL(insert_to_sub);
 
         insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1003, 'نور', 'بدران', '1996-01-12', 'رام الله', 'أنثى', 0598743011, 'فعال');";
         db.execSQL(insert_to_readers);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1003, '2019-11-04', '2020-11-04', 'فعال');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1003, '2019-11-4', '2020-11-4', 'فعال');";
         db.execSQL(insert_to_sub);
 
         insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1004, 'أحمد', 'خالد', '2000-06-30', 'نابلس', 'ذكر', 0532163321, 'فعال');";
         db.execSQL(insert_to_readers);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1004, '2017-06-04', '2018-06-04', 'منتهٍ');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1004, '2017-6-4', '2018-6-4', 'منتهٍ');";
         db.execSQL(insert_to_sub);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1004, '2019-01-22', '2020-01-22', 'فعال');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1004, '2019-1-22', '2020-1-22', 'فعال');";
         db.execSQL(insert_to_sub);
 
         insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1005, 'طارق', 'إبراهيم', '2004-12-02', 'جنين', 'ذكر', 0563212325, 'منتهٍ');";
@@ -265,24 +265,24 @@ public class DBconnections extends SQLiteOpenHelper {
         insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1005, '2005-10-16', '2006-10-16', 'منتهٍ');";
         db.execSQL(insert_to_sub);
 
-        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1006, 'سجى', 'بدير', '2001-10-07', 'طولكرم', 'أنثى', 0598787888, 'فعال');";
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1006, 'سجى', 'بدير', '2001-10-7', 'طولكرم', 'أنثى', 0598787888, 'فعال');";
         db.execSQL(insert_to_readers);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1006, '2019-02-23', '2020-02-23', 'فعال');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1006, '2019-2-23', '2020-2-23', 'فعال');";
         db.execSQL(insert_to_sub);
 
-        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1007, 'حلا', 'يحيى', '1990-03-15', 'طولكرم', 'أنثى', 0153256322, 'فعال');";
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1007, 'حلا', 'يحيى', '1990-3-15', 'طولكرم', 'أنثى', 0153256322, 'فعال');";
         db.execSQL(insert_to_readers);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1007, '2019-05-11', '2020-05-11', 'فعال');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1007, '2019-5-11', '2020-5-11', 'فعال');";
         db.execSQL(insert_to_sub);
 
-        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1008, 'سندس', 'ياسر', '1989-07-23', 'طولكرم', 'أنثى', 0569878896, 'منتهٍ');";
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1008, 'سندس', 'ياسر', '1989-7-23', 'طولكرم', 'أنثى', 0569878896, 'منتهٍ');";
         db.execSQL(insert_to_readers);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1008, '2018-07-12', '2019-07-12', 'منتهٍ');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1008, '2018-7-12', '2019-07-12', 'منتهٍ');";
         db.execSQL(insert_to_sub);
 
-        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1009, 'رامي', 'عمر', '1985-09-06', 'جنين', 'ذكر', 0596363654, 'فعال');";
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1009, 'رامي', 'عمر', '1985-9-6', 'جنين', 'ذكر', 0596363654, 'فعال');";
         db.execSQL(insert_to_readers);
-        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1009, '2019-09-19', '2020-09-19', 'فعال');";
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1009, '2019-9-19', '2020-9-19', 'فعال');";
         db.execSQL(insert_to_sub);
     }
 
@@ -320,6 +320,17 @@ public class DBconnections extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+
+    private void create_triggers(SQLiteDatabase db) {
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS update_reader AFTER UPDATE ON " + ReadersEntry.TABLE_NAME
+                + " BEGIN INSERT INTO "
+                + UpdatedReadersEntry.TABLE_NAME + " VALUES ("
+                + "old.ID, DATETIME('NOW'), "
+                + "old.first_name, old.last_name, old.date_of_birth, old.address, old.gender, old.phone, "
+                + "new.first_name, new.last_name, new.date_of_birth, new.address, new.gender, new.phone"
+                + "); END;");
     }
 
 }

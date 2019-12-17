@@ -35,8 +35,6 @@ public final class LibraryContract {
         public final static String COLUMN_READER_PHONE = "phone";
         public final static String COLUMN_READER_SUB_STATUS = "sub_status";
 
-        public static final int GENDER_MALE = 0;
-        public static final int GENDER_FEMALE = 1;
     }
 
     public static final class BooksEntry implements BaseColumns {
@@ -49,7 +47,6 @@ public final class LibraryContract {
         public final static String COLUMN_BOOK_PUBLICATION_HOUSE = "publication_house";
         public final static String COLUMN_BOOK_AUTHOR = "author";
         public final static String COLUMN_BOOK_CATEGORY = "category";
-        public final static String COLUMN_BOOK_BRANCH_ID = "branch_id";
         public final static String COLUMN_BOOK_NUMBER_OF_COPIES = "number_of_copies";
     }
 
@@ -82,6 +79,7 @@ public final class LibraryContract {
 
         public final static String COLUMN_BOOK_COPIES_BOOK_ID = "book_id";
         public final static String COLUMN_BOOK_COPIES_COPY_ID = "copy_id";
+        public final static String COLUMN_BOOK_COPIES_BRANCH_ID = "branch_id";
         public final static String COLUMN_BOOK_COPIES_RESERVED = "reserved";
     }
 

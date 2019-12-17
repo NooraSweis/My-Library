@@ -4,31 +4,41 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <Spinner
+        android:id="@+id/edtxt_new_copy_branch_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+
+        android:textSize="25sp"
+        android:inputType="number"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="نسخة محفوظة؟"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
-        android:textSize="20sp"
-        android:textColor="#000000"/>
+        android:text="نسخة محفوظة؟"
+        android:textColor="#000000"
+        android:textSize="25sp" />
+
     <CheckBox
         android:id="@+id/checkbox_reserved"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
-        />
+        android:layout_marginBottom="15dp" />
+
     <Button
         android:id="@+id/btn_ok_reserved_dialog"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:text="OK"
-        android:background="@drawable/custom_button_main"
         android:layout_gravity="end"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
-        />
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/custom_button_main"
+        android:text="OK" />
 </LinearLayout>

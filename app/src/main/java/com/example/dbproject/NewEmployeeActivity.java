@@ -134,7 +134,7 @@ public class NewEmployeeActivity extends AppCompatActivity {
         if (cursor.getCount() != 0) {
             cursor.moveToLast();
             ID.setText((cursor.getInt(0) + 1) + "");
-        }else {
+        } else {
             ID.setText("1000");
         }
         System.out.println("new ID generated");
@@ -197,7 +197,7 @@ public class NewEmployeeActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month = month + 1;
-                String date = year + "-" + month+1 + "-" + dayOfMonth;
+                String date = year + "-" + (month + 1) + "-" + dayOfMonth;
                 hire_date.setText(date);
             }
         };
