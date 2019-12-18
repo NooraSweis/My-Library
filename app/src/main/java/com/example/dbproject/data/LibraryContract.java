@@ -115,9 +115,13 @@ public final class LibraryContract {
         public final static String NEW_PHONE = "new_phone";
     }
 
-    public static final class UpdatedCopies implements BaseColumns{
+    public static final class UpdatedCopiesEntry implements BaseColumns {
 
         public final static String TABLE_NAME = "updated_copies";
 
+        public final static String DATE_OF_UPDATE = "date_of_update";
+        public final static String BOOK_ID = "book_id";
+        public final static String OLD_Copy_Number = "old_copy_number";
+        public final static String NEW_Copy_Number = "new_copy_number";
     }
 }

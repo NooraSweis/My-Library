@@ -152,6 +152,13 @@ public class DBconnections extends SQLiteOpenHelper {
                 + UpdatedReadersEntry.NEW_GENDER + " TEXT NOT NULL, "
                 + UpdatedReadersEntry.NEW_PHONE + " INTEGER NOT NULL);";
         db.execSQL(SQL_CREATE_READERS_archives_TABLE);
+
+        String SQL_CREATE_archives_copies_TABLE = "CREATE TABLE " + LibraryContract.UpdatedCopiesEntry.TABLE_NAME + "("
+                + LibraryContract.UpdatedCopiesEntry.DATE_OF_UPDATE + " TEXT NOT NULL, "
+                + LibraryContract.UpdatedCopiesEntry.BOOK_ID + " INTEGER NOT NULL, "
+                + LibraryContract.UpdatedCopiesEntry.OLD_Copy_Number + " TEXT NOT NULL, "
+                + LibraryContract.UpdatedCopiesEntry.NEW_Copy_Number + " TEXT NOT NULL);" ;
+        db.execSQL(SQL_CREATE_archives_copies_TABLE);
     }
 
     private void insertDefaultRecordsToReaderRequests(SQLiteDatabase db) {
@@ -331,6 +338,14 @@ public class DBconnections extends SQLiteOpenHelper {
                 + "old.first_name, old.last_name, old.date_of_birth, old.address, old.gender, old.phone, "
                 + "new.first_name, new.last_name, new.date_of_birth, new.address, new.gender, new.phone"
                 + "); END;");
-    }
 
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS update_copies AFTER update ON " + BooksEntry.TABLE_NAME
+                + " BEGIN INSERT INTO "
+                + LibraryContract.UpdatedCopiesEntry.TABLE_NAME + " VALUES ("
+                + "DATETIME('NOW'), "
+                + "old.ID, "
+                + "old.number_of_copies, "
+                + "new.number_of_copies"
+                + "); END;");
+    }
 }

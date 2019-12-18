@@ -112,7 +112,7 @@ public class ShowBooks extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!search_edtxt.getText().toString().isEmpty()) {
-                    String select_where = "SELECT * FROM " + BooksEntry.TABLE_NAME + " WHERE " + BooksEntry.COLUMN_BOOK_TITLE + " LIKE '%" + search_edtxt.getText().toString() + "%' ORDER BY " + BooksEntry.COLUMN_BOOK_TITLE + " ASC;";
+                    String select_where = "SELECT * FROM " + BooksEntry.TABLE_NAME + " WHERE " + BooksEntry.COLUMN_BOOK_TITLE + " || " + BooksEntry.COLUMN_BOOK_AUTHOR + " LIKE '%" + search_edtxt.getText().toString() + "%' ORDER BY " + BooksEntry.COLUMN_BOOK_TITLE + " ASC;";
                     Cursor search_cursor = db.rawQuery(select_where, null);
                     ArrayList<String> listItem_search = new ArrayList<>();
                     ArrayAdapter adapter_search = new ArrayAdapter(ShowBooks.this, android.R.layout.simple_list_item_1, listItem_search);
@@ -168,9 +168,11 @@ public class ShowBooks extends AppCompatActivity {
         Button remove_copy = selected_book_dialog.findViewById(R.id.btn_remove_book_copy);
         Button return_copy = selected_book_dialog.findViewById(R.id.btn_book_return);
 
-        if (selected_book_number_of_copies.equals("0")) {
-            remove_copy.setEnabled(false);
+        if (Integer.parseInt(selected_book_number_of_copies) - get_number_of_borrowed_copies() - get_number_of_reserved_copies() <= 0) {
             borrow.setEnabled(false);
+        }
+        if (Integer.parseInt(selected_book_number_of_copies) - get_number_of_borrowed_copies() <= 0) {
+            remove_copy.setEnabled(false);
         }
 
         edit_book.setOnClickListener(new View.OnClickListener() {
