@@ -277,7 +277,16 @@ public class NewBookActivity extends AppCompatActivity {
         datePicker = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = year + "-" + (month + 1) + "-" + dayOfMonth;
+                String mm = (month + 1) + "";
+                String dd = dayOfMonth + "";
+
+                if (mm.length() == 1) {
+                    mm = "0" + mm;
+                }
+                if (dd.length() == 1) {
+                    dd = "0" + dd;
+                }
+                String date = year + "-" + mm + "-" + dd;
                 publish_date.setText(date);
             }
         };
