@@ -159,10 +159,10 @@ public class DBconnections extends SQLiteOpenHelper {
                 + " VALUES (100,1000,1000,1,'2019-12-10', null,1000);";
         db.execSQL(insert_request);
         insert_request = "INSERT INTO " + ReaderRequestEntry.TABLE_NAME
-                + " VALUES (101,1001,1001,1,'2019-12-02', null,1000);";
+                + " VALUES (101,1001,1001,1,'2019-12-04', null,1000);";
         db.execSQL(insert_request);
         insert_request = "INSERT INTO " + ReaderRequestEntry.TABLE_NAME
-                + " VALUES (102,1009,1001,2,'2019-12-02', null,1000);";
+                + " VALUES (102,1009,1001,2,'2019-12-04', null,1000);";
         db.execSQL(insert_request);
         insert_request = "INSERT INTO " + ReaderRequestEntry.TABLE_NAME
                 + " VALUES (103,1002,1002,2,'2019-12-02', null,1000);";

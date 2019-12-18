@@ -61,23 +61,15 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase update_db = dBconnections.getWritableDatabase();
         SQLiteDatabase select_db = dBconnections.getReadableDatabase();
 
-        //get current date
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) +1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        String current_date = year + "-" + month + "-" + day;
-        System.out.println(current_date);
-
         String select_query = "SELECT " + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_READER_ID + " FROM " + SubscriptionsEntry.TABLE_NAME
-                + " WHERE " + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_END_DATE + " = '" + current_date + "';";
+                + " WHERE " + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_END_DATE + " = '" + get_current_date() + "';";
         Cursor cursor = select_db.rawQuery(select_query, null);
 
         String update_query = "UPDATE " + SubscriptionsEntry.TABLE_NAME + " SET " + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_STATUS + " = 'منتهٍ' "
-                + "WHERE " + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_END_DATE + " = '" + current_date + "';";
+                + "WHERE " + SubscriptionsEntry.COLUMN_SUBSCRIPTIONS_END_DATE + " = '" + get_current_date() + "';";
         update_db.execSQL(update_query);
 
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             int id = cursor.getInt(0);
             String update_reader = "UPDATE " + ReadersEntry.TABLE_NAME + " SET " + ReadersEntry.COLUMN_READER_SUB_STATUS
                     + " = 'منتهٍ' " + "WHERE " + ReadersEntry.COLUMN_READER_ID + " = " + id + ";";
@@ -135,5 +127,24 @@ public class MainActivity extends AppCompatActivity {
         selected_reader_address = "";
         selected_reader_sub_date = "";
         selected_reader_sub_status = "";
+    }
+
+    public static String get_current_date() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        String mm = month + "";
+        String dd = day + "";
+
+        if (mm.length() == 1) {
+            mm = "0" + mm;
+        }
+        if (dd.length() == 1) {
+            dd = "0" + dd;
+        }
+
+        return year + "-" + mm + "-" + dd;
     }
 }

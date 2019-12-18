@@ -16,13 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
             android:background="#A38177"
             android:fontFamily="@font/nefel_adeti"
             android:text="الكتب المعارة "
             android:textAlignment="center"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp"/>
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btn_show_borrowed_books"
@@ -31,21 +31,21 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
+            android:onClick="show_borrowed_books"
             android:text="                       عرض                        "
             android:textColor="#A38177"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
             android:background="#A38177"
             android:fontFamily="@font/nefel_adeti"
             android:text="الكتب المفروض استلامها اليوم "
             android:textAlignment="center"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp"/>
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btn_show_books_must_return"
@@ -54,21 +54,21 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
+            android:onClick="show_books_must_return"
             android:text="                       عرض                        "
             android:textColor="#A38177"
-            android:textSize="20sp"
-            android:onClick="show_books_must_return"/>
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
             android:background="#A38177"
             android:fontFamily="@font/nefel_adeti"
             android:text="الكتب المتأخرة عن تاريخ الإرجاع"
             android:textAlignment="center"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp"/>
+            android:textStyle="bold" />
 
         <Button
             android:layout_width="wrap_content"
@@ -76,6 +76,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
+            android:onClick="show_late_books"
             android:text="                       عرض                        "
             android:textColor="#A38177"
             android:textSize="20sp" />
@@ -88,8 +89,20 @@
             android:text="عدد الكتب التي تمت استعارتها من مشترك محدد"
             android:textAlignment="center"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp"/>
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtxt_reader_id_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/nefel_adeti"
+            android:hint="  رقم المشترك  "
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <Button
             android:layout_width="wrap_content"
@@ -97,6 +110,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
+            android:onClick="show_one_reader_books"
             android:text="                       عرض                        "
             android:textColor="#A38177"
             android:textSize="20sp" />
@@ -104,13 +118,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
             android:background="#A38177"
             android:fontFamily="@font/nefel_adeti"
             android:text="أسماء المشتركين الذين ينتهي اشتراكهم هذا الشهر"
             android:textAlignment="center"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp"/>
+            android:textStyle="bold" />
 
         <Button
             android:layout_width="wrap_content"
@@ -118,6 +132,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/custom_button_renew"
+            android:onClick="show_end_this_month"
             android:text="                       عرض                        "
             android:textColor="#A38177"
             android:textSize="20sp" />
