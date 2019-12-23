@@ -63,28 +63,54 @@ public class ShowEmployees extends AppCompatActivity {
         employees_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String select_readers_query = "SELECT * FROM " + EmployeesEntry.TABLE_NAME + " ORDER BY " + EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " ASC";
-                cursor = db.rawQuery(select_readers_query, null);
-                cursor.moveToPosition(position);
-                //Give values to static attributes to use them if edit button clicked
-                selected_employee_id = cursor.getInt(0) + "";
-                selected_employee_first_name = cursor.getString(1);
-                selected_employee_last_name = cursor.getString(2);
-                selected_employee_address = cursor.getString(3);
-                selected_employee_branch_id = cursor.getInt(4) + "";
-                selected_employee_hire_date = cursor.getString(5);
-                selected_employee_email = cursor.getString(6);
-                selected_employee_phone = cursor.getInt(7) + "";
-                selected_employee_position = cursor.getString(8);
+                String info = "";
+                if (search_edtxt.getText().toString().isEmpty()) {
+                    String select_readers_query = "SELECT * FROM " + EmployeesEntry.TABLE_NAME + " ORDER BY " + EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " ASC";
+                    cursor = db.rawQuery(select_readers_query, null);
+                    cursor.moveToPosition(position);
+                    //Give values to static attributes to use them if edit button clicked
+                    selected_employee_id = cursor.getInt(0) + "";
+                    selected_employee_first_name = cursor.getString(1);
+                    selected_employee_last_name = cursor.getString(2);
+                    selected_employee_address = cursor.getString(3);
+                    selected_employee_branch_id = cursor.getInt(4) + "";
+                    selected_employee_hire_date = cursor.getString(5);
+                    selected_employee_email = cursor.getString(6);
+                    selected_employee_phone = cursor.getInt(7) + "";
+                    selected_employee_position = cursor.getString(8);
 
-                String info = "رقم الموظف: " + selected_employee_id + "\n"
-                        + "اسم الموظف: " + selected_employee_first_name + " " + selected_employee_last_name + "\n"
-                        + "العنوان: " + selected_employee_address + "\n"
-                        + "رقم الفرع: " + selected_employee_branch_id + "\n"
-                        + "تاريخ التوظيف: " + selected_employee_hire_date + "\n"
-                        + "البريد اﻹلكتروني: " + selected_employee_email + "\n"
-                        + "الهاتف: " + selected_employee_phone + "\n"
-                        + "المنصب: " + selected_employee_position + "\n";
+                    info = "رقم الموظف: " + selected_employee_id + "\n"
+                            + "اسم الموظف: " + selected_employee_first_name + " " + selected_employee_last_name + "\n"
+                            + "العنوان: " + selected_employee_address + "\n"
+                            + "رقم الفرع: " + selected_employee_branch_id + "\n"
+                            + "تاريخ التوظيف: " + selected_employee_hire_date + "\n"
+                            + "البريد اﻹلكتروني: " + selected_employee_email + "\n"
+                            + "الهاتف: " + selected_employee_phone + "\n"
+                            + "المنصب: " + selected_employee_position + "\n";
+                } else {
+                    String select_readers_query = "SELECT * FROM " + EmployeesEntry.TABLE_NAME + " WHERE " + EmployeesEntry.COLUMN_EMPLOYEE_FIRST_NAME + " || ' '" + " || " + EmployeesEntry.COLUMN_EMPLOYEE_LAST_NAME + " LIKE '%" + search_edtxt.getText().toString() + "%'";
+                    cursor = db.rawQuery(select_readers_query, null);
+                    cursor.moveToPosition(position);
+                    //Give values to static attributes to use them if edit button clicked
+                    selected_employee_id = cursor.getInt(0) + "";
+                    selected_employee_first_name = cursor.getString(1);
+                    selected_employee_last_name = cursor.getString(2);
+                    selected_employee_address = cursor.getString(3);
+                    selected_employee_branch_id = cursor.getInt(4) + "";
+                    selected_employee_hire_date = cursor.getString(5);
+                    selected_employee_email = cursor.getString(6);
+                    selected_employee_phone = cursor.getInt(7) + "";
+                    selected_employee_position = cursor.getString(8);
+
+                    info = "رقم الموظف: " + selected_employee_id + "\n"
+                            + "اسم الموظف: " + selected_employee_first_name + " " + selected_employee_last_name + "\n"
+                            + "العنوان: " + selected_employee_address + "\n"
+                            + "رقم الفرع: " + selected_employee_branch_id + "\n"
+                            + "تاريخ التوظيف: " + selected_employee_hire_date + "\n"
+                            + "البريد اﻹلكتروني: " + selected_employee_email + "\n"
+                            + "الهاتف: " + selected_employee_phone + "\n"
+                            + "المنصب: " + selected_employee_position + "\n";
+                }
                 openDialog(info);
                 cursor.close();
             }

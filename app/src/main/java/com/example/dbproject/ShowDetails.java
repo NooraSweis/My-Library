@@ -41,7 +41,9 @@ public class ShowDetails extends AppCompatActivity {
     }
 
     public void show_borrowed_books(View view) {
-        String query = "SELECT title, book_id, copy_id, reader_id, first_name || \" \" || last_name FROM readers, books, reader_request WHERE readers.ID = reader_request.reader_id AND books.ID = reader_request.book_id AND return_date IS NULL;";
+        String query = "SELECT title, book_id, copy_id, reader_id, first_name || \" \" || last_name " +
+                "FROM readers, books, reader_request WHERE readers.ID = reader_request.reader_id " +
+                "AND books.ID = reader_request.book_id AND return_date IS NULL;";
 
         ListView list = display_list(query);
 
@@ -120,7 +122,7 @@ public class ShowDetails extends AppCompatActivity {
     }
 
     public void show_end_this_month(View view) {
-        String query = "SELECT first_name, last_name " +
+        String query = "SELECT first_name || \" \" || last_name " +
                 "FROM readers, subscriptions " +
                 "WHERE readers.ID = subscriptions.reader_id " +
                 "AND strftime('%m', end_date) = strftime('%m','now') " +

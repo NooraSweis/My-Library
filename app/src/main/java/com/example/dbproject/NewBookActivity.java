@@ -39,12 +39,13 @@ import static com.example.dbproject.ShowReaders.selected_reader_id;
 
 public class NewBookActivity extends AppCompatActivity {
 
+    final int REQUEST_CODE_GALLERY = 999;
     DBconnections bookDBHelper;
 
     EditText book_title;
     TextView ID;
     Spinner copy_id;
-    EditText publish_date;
+    TextView publish_date;
     DatePickerDialog.OnDateSetListener datePicker;
     EditText publish_house;
     EditText author;
@@ -65,7 +66,7 @@ public class NewBookActivity extends AppCompatActivity {
         book_title = (EditText) findViewById(R.id.edtxt_book_name);
         ID = findViewById(R.id.edtxt_book_id);
         copy_id = findViewById(R.id.spinner_new_copy_id);
-        publish_date = (EditText) findViewById(R.id.edtxt_publication_date);
+        publish_date = findViewById(R.id.edtxt_publication_date);
         publish_house = (EditText) findViewById(R.id.edtxt_publication_house);
         author = (EditText) findViewById(R.id.edtxt_author_name);
         branch_id = findViewById(R.id.spinner_new_book_branch_id);
@@ -114,6 +115,11 @@ public class NewBookActivity extends AppCompatActivity {
 
             ID.setEnabled(false);
         } else {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("1");
+            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, list);
+            copy_id.setAdapter(adapter);
+            copy_id.setSelection(0);
             copy_id.setEnabled(false);
         }
 
@@ -134,28 +140,22 @@ public class NewBookActivity extends AppCompatActivity {
         copy_id.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String text = parent.getItemAtPosition(position).toString();
-                selected_copy = text;
-                Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
+                selected_copy = parent.getItemAtPosition(position).toString();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
         branch_id.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String text = parent.getItemAtPosition(position).toString();
-                selected_branch = text;
-                Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
+                selected_branch = parent.getItemAtPosition(position).toString();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 

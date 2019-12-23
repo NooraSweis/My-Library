@@ -30,7 +30,8 @@
             android:layout_gravity="end"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/tv_list_style" />
+            android:background="@drawable/tv_list_style"
+            />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

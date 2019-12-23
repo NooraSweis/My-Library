@@ -69,27 +69,48 @@ public class ShowReaders extends AppCompatActivity {
         readers_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(position);
-                String select_readers_query = "SELECT * FROM " + ReadersEntry.TABLE_NAME + " ORDER BY " + ReadersEntry.COLUMN_READER_FIRST_NAME + " ASC";
-                cursor = db.rawQuery(select_readers_query, null);
-                cursor.moveToPosition(position);
-                selected_reader_id = cursor.getInt(0) + "";
-                selected_reader_first_name = cursor.getString(1);
-                selected_reader_last_name = cursor.getString(2);
-                selected_reader_date_of_birth = cursor.getString(3);
-                selected_reader_address = cursor.getString(4);
-                selected_reader_gender = cursor.getString(5);
-                selected_reader_phone = cursor.getInt(6) + "";
-                selected_reader_sub_status = cursor.getString(7);
+                String info = "";
+                if (search_edtxt.getText().toString().trim().isEmpty()) {
+                    String select_readers_query = "SELECT * FROM " + ReadersEntry.TABLE_NAME + " ORDER BY " + ReadersEntry.COLUMN_READER_FIRST_NAME + " ASC";
+                    cursor = db.rawQuery(select_readers_query, null);
+                    cursor.moveToPosition(position);
+                    selected_reader_id = cursor.getInt(0) + "";
+                    selected_reader_first_name = cursor.getString(1);
+                    selected_reader_last_name = cursor.getString(2);
+                    selected_reader_date_of_birth = cursor.getString(3);
+                    selected_reader_address = cursor.getString(4);
+                    selected_reader_gender = cursor.getString(5);
+                    selected_reader_phone = cursor.getInt(6) + "";
+                    selected_reader_sub_status = cursor.getString(7);
 
-                String info = "الرقم: " + selected_reader_id + "\n"
-                        + "الاسم: " + selected_reader_first_name + " " + selected_reader_last_name + "\n"
-                        + "تاريخ الميلاد: " + selected_reader_date_of_birth + "\n"
-                        + "العنوان: " + selected_reader_address + "\n"
-                        + "الجنس: " + selected_reader_gender + "\n"
-                        + "الهاتف: " + selected_reader_phone + "\n"
-                        + "حالة الاشتراك: " + selected_reader_sub_status;
+                    info = "الرقم: " + selected_reader_id + "\n"
+                            + "الاسم: " + selected_reader_first_name + " " + selected_reader_last_name + "\n"
+                            + "تاريخ الميلاد: " + selected_reader_date_of_birth + "\n"
+                            + "العنوان: " + selected_reader_address + "\n"
+                            + "الجنس: " + selected_reader_gender + "\n"
+                            + "الهاتف: " + selected_reader_phone + "\n"
+                            + "حالة الاشتراك: " + selected_reader_sub_status;
+                } else {
+                    String select_readers_query = "SELECT * FROM " + ReadersEntry.TABLE_NAME + " WHERE " + ReadersEntry.COLUMN_READER_FIRST_NAME + " || ' '" + " || " + ReadersEntry.COLUMN_READER_LAST_NAME + " LIKE '%" + search_edtxt.getText().toString() + "%'";
+                    cursor = db.rawQuery(select_readers_query, null);
+                    cursor.moveToPosition(position);
+                    selected_reader_id = cursor.getInt(0) + "";
+                    selected_reader_first_name = cursor.getString(1);
+                    selected_reader_last_name = cursor.getString(2);
+                    selected_reader_date_of_birth = cursor.getString(3);
+                    selected_reader_address = cursor.getString(4);
+                    selected_reader_gender = cursor.getString(5);
+                    selected_reader_phone = cursor.getInt(6) + "";
+                    selected_reader_sub_status = cursor.getString(7);
 
+                    info = "الرقم: " + selected_reader_id + "\n"
+                            + "الاسم: " + selected_reader_first_name + " " + selected_reader_last_name + "\n"
+                            + "تاريخ الميلاد: " + selected_reader_date_of_birth + "\n"
+                            + "العنوان: " + selected_reader_address + "\n"
+                            + "الجنس: " + selected_reader_gender + "\n"
+                            + "الهاتف: " + selected_reader_phone + "\n"
+                            + "حالة الاشتراك: " + selected_reader_sub_status;
+                }
                 openDialog(info);
                 cursor.close();
             }

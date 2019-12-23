@@ -48,6 +48,7 @@ public final class LibraryContract {
         public final static String COLUMN_BOOK_AUTHOR = "author";
         public final static String COLUMN_BOOK_CATEGORY = "category";
         public final static String COLUMN_BOOK_NUMBER_OF_COPIES = "number_of_copies";
+        public final static String COLUMN_BOOK_ICON = "icon";
     }
 
     public static final class BranchesEntry implements BaseColumns {

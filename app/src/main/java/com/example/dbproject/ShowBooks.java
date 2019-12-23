@@ -1,18 +1,14 @@
 package com.example.dbproject;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -21,9 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,12 +25,13 @@ import android.widget.Toast;
 import com.example.dbproject.data.DBconnections;
 import com.example.dbproject.data.LibraryContract.ReadersEntry;
 import com.example.dbproject.data.LibraryContract.ReaderRequestEntry;
-import com.example.dbproject.data.LibraryContract.SubscriptionsEntry;
 import com.example.dbproject.data.LibraryContract.BookCopiesEntry;
 import com.example.dbproject.data.LibraryContract.BooksEntry;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static com.example.dbproject.MainActivity.get_current_date;
 
 
 public class ShowBooks extends AppCompatActivity {
@@ -45,10 +40,8 @@ public class ShowBooks extends AppCompatActivity {
     SQLiteDatabase db;
 
     ListView books_list;
-    Cursor cursor;
 
-    ArrayList<String> listItem;
-    ArrayAdapter adapter;
+    MyBookAdapter adapter;
 
     EditText search_edtxt;
     public static String selected_book_id = "";
@@ -73,32 +66,56 @@ public class ShowBooks extends AppCompatActivity {
         bookDBHelper = new DBconnections(this);
         db = bookDBHelper.getReadableDatabase();
 
-        listItem = new ArrayList<>();
         viewData();
 
         books_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String select_books_query = "SELECT * FROM " + BooksEntry.TABLE_NAME + " ORDER BY " + BooksEntry.COLUMN_BOOK_TITLE + " ASC";
-                cursor = db.rawQuery(select_books_query, null);
-                cursor.moveToPosition(position);
-                selected_book_id = cursor.getInt(0) + "";
-                selected_book_title = cursor.getString(1);
-                selected_book_pub_date = cursor.getString(2);
-                selected_book_pub_house = cursor.getString(3);
-                selected_book_author = cursor.getString(4);
-                selected_book_category = cursor.getString(5);
-                selected_book_number_of_copies = cursor.getInt(6) + "";
+                String info = "";
+                Cursor cursor;
+                if (search_edtxt.getText().toString().isEmpty()) {
+                    String select_books_query = "SELECT * FROM " + BooksEntry.TABLE_NAME + " ORDER BY " + BooksEntry.COLUMN_BOOK_TITLE + " ASC";
+                    cursor = db.rawQuery(select_books_query, null);
+                    cursor.moveToPosition(position);
+                    selected_book_id = cursor.getInt(0) + "";
+                    selected_book_title = cursor.getString(1);
+                    selected_book_pub_date = cursor.getString(2);
+                    selected_book_pub_house = cursor.getString(3);
+                    selected_book_author = cursor.getString(4);
+                    selected_book_category = cursor.getString(5);
+                    selected_book_number_of_copies = cursor.getInt(6) + "";
 
-                String info = "رقم الكتاب :" + selected_book_id + "\n"
-                        + "اسم الكتاب : " + selected_book_title + "\n "
-                        + "تاريخ النشر :" + selected_book_pub_date + "\n"
-                        + "دار النشر : " + selected_book_pub_house + "\n"
-                        + "المؤلف : " + selected_book_author + "\n"
-                        + "فئة الكتاب : " + selected_book_category + "\n"
-                        + "عدد النسخ المتوفرة للاستعارة :" +
-                        (Integer.parseInt(selected_book_number_of_copies) - get_number_of_borrowed_copies() -
-                                get_number_of_reserved_copies()) + "\n";
+                    info = "رقم الكتاب :" + selected_book_id + "\n"
+                            + "اسم الكتاب : " + selected_book_title + "\n "
+                            + "تاريخ النشر :" + selected_book_pub_date + "\n"
+                            + "دار النشر : " + selected_book_pub_house + "\n"
+                            + "المؤلف : " + selected_book_author + "\n"
+                            + "فئة الكتاب : " + selected_book_category + "\n"
+                            + "عدد النسخ المتوفرة للاستعارة :" +
+                            (Integer.parseInt(selected_book_number_of_copies) - get_number_of_borrowed_copies() -
+                                    get_number_of_reserved_copies()) + "\n";
+                } else {
+                    String select_books_query = "SELECT * FROM " + BooksEntry.TABLE_NAME + " WHERE " + BooksEntry.COLUMN_BOOK_TITLE + " || " + BooksEntry.COLUMN_BOOK_AUTHOR + " LIKE '%" + search_edtxt.getText().toString() + "%' ORDER BY " + BooksEntry.COLUMN_BOOK_TITLE + " ASC;";
+                    cursor = db.rawQuery(select_books_query, null);
+                    cursor.moveToPosition(position);
+                    selected_book_id = cursor.getInt(0) + "";
+                    selected_book_title = cursor.getString(1);
+                    selected_book_pub_date = cursor.getString(2);
+                    selected_book_pub_house = cursor.getString(3);
+                    selected_book_author = cursor.getString(4);
+                    selected_book_category = cursor.getString(5);
+                    selected_book_number_of_copies = cursor.getInt(6) + "";
+
+                    info = "رقم الكتاب :" + selected_book_id + "\n"
+                            + "اسم الكتاب : " + selected_book_title + "\n "
+                            + "تاريخ النشر :" + selected_book_pub_date + "\n"
+                            + "دار النشر : " + selected_book_pub_house + "\n"
+                            + "المؤلف : " + selected_book_author + "\n"
+                            + "فئة الكتاب : " + selected_book_category + "\n"
+                            + "عدد النسخ المتوفرة للاستعارة :" +
+                            (Integer.parseInt(selected_book_number_of_copies) - get_number_of_borrowed_copies() -
+                                    get_number_of_reserved_copies()) + "\n";
+                }
                 openDialog(info);
                 cursor.close();
             }
@@ -112,16 +129,20 @@ public class ShowBooks extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!search_edtxt.getText().toString().isEmpty()) {
-                    String select_where = "SELECT * FROM " + BooksEntry.TABLE_NAME + " WHERE " + BooksEntry.COLUMN_BOOK_TITLE + " || " + BooksEntry.COLUMN_BOOK_AUTHOR + " LIKE '%" + search_edtxt.getText().toString() + "%' ORDER BY " + BooksEntry.COLUMN_BOOK_TITLE + " ASC;";
+                    String select_where = "SELECT title, author, icon FROM " + BooksEntry.TABLE_NAME + " WHERE " + BooksEntry.COLUMN_BOOK_TITLE + " || " + BooksEntry.COLUMN_BOOK_AUTHOR + " LIKE '%" + search_edtxt.getText().toString() + "%' ORDER BY " + BooksEntry.COLUMN_BOOK_TITLE + " ASC;";
                     Cursor search_cursor = db.rawQuery(select_where, null);
-                    ArrayList<String> listItem_search = new ArrayList<>();
-                    ArrayAdapter adapter_search = new ArrayAdapter(ShowBooks.this, android.R.layout.simple_list_item_1, listItem_search);
+                    ArrayList<String> titleList_searched = new ArrayList<>();
+                    ArrayList<String> authorList_searched = new ArrayList<>();
+                    ArrayList<Integer> iconList_searched = new ArrayList<>();
+
+                    MyBookAdapter adapter_search = new MyBookAdapter(ShowBooks.this, titleList_searched, authorList_searched, iconList_searched);
                     while (search_cursor.moveToNext()) {
-                        listItem_search.add(search_cursor.getString(1));
+                        titleList_searched.add(search_cursor.getString(0));
+                        authorList_searched.add(search_cursor.getString(1));
+                        iconList_searched.add(search_cursor.getInt(2));
                     }
                     books_list.setAdapter(adapter_search);
                     search_cursor.close();
-                    System.out.println(search_cursor.getCount() + "\t" + listItem_search.size());
                 } else {
                     books_list.setAdapter(adapter);
                 }
@@ -159,7 +180,7 @@ public class ShowBooks extends AppCompatActivity {
         final Dialog selected_book_dialog = new Dialog(this);
         selected_book_dialog.setContentView(R.layout.book_dialog);
 
-        // set the custom dialog components - text, image and button
+        // set the custom dialog components
         TextView tv_ino = (TextView) selected_book_dialog.findViewById(R.id.textView_display_book_info);
         tv_ino.setText(info);
         Button edit_book = selected_book_dialog.findViewById(R.id.btn_edit_book_info);
@@ -217,7 +238,7 @@ public class ShowBooks extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (copy_is_borrowed(copy_id.getText().toString().trim())) {
-                            String query = "UPDATE reader_request SET return_date = '" + getCurrentDate() + "' WHERE book_id = "
+                            String query = "UPDATE reader_request SET return_date = '" + get_current_date() + "' WHERE book_id = "
                                     + selected_book_id + " AND copy_id = " + copy_id.getText().toString().trim();
                             SQLiteDatabase database = bookDBHelper.getWritableDatabase();
                             database.execSQL(query);
@@ -388,18 +409,25 @@ public class ShowBooks extends AppCompatActivity {
 
     private void viewData() {
         SQLiteDatabase db = bookDBHelper.getReadableDatabase();
-        String query = "select * from " + BooksEntry.TABLE_NAME + " ORDER BY " + BooksEntry.COLUMN_BOOK_TITLE + " ASC;";
+        String query = "select title, author, icon from " + BooksEntry.TABLE_NAME + " ORDER BY " + BooksEntry.COLUMN_BOOK_TITLE + " ASC;";
         Cursor cursor = db.rawQuery(query, null);
+        ArrayList<String> titleList = new ArrayList<>();
+        ArrayList<String> authorList = new ArrayList<>();
+        ArrayList<Integer> iconList = new ArrayList<>();
+
         while (cursor.moveToNext()) {
-            listItem.add(cursor.getString(1));
+            titleList.add(cursor.getString(0));
+            authorList.add(cursor.getString(1));
+            iconList.add(cursor.getInt(2));
         }
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
+        adapter = new MyBookAdapter(this, titleList, authorList, iconList);
         books_list.setAdapter(adapter);
         if (cursor.getCount() == 0) {
             Toast.makeText(this, "No Books until now", Toast.LENGTH_LONG).show();
         }
         cursor.close();
     }
+
 
     public void showBooksToAddBooks(View view) {
         startActivity(new Intent(this, NewBookActivity.class));
@@ -498,13 +526,5 @@ public class ShowBooks extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    private String getCurrentDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return year + "-" + month + "-" + day;
     }
 }

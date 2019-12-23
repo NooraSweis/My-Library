@@ -149,14 +149,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <EditText
+            <TextView
                 android:id="@+id/edtxt_publication_date"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="@android:color/white"
-                android:importantForAutofill="no"
-                android:inputType="date"
                 android:textAlignment="center" />
 
             <TextView

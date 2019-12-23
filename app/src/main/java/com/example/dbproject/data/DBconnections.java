@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.dbproject.R;
 import com.example.dbproject.data.LibraryContract.UpdatedReadersEntry;
 import com.example.dbproject.data.LibraryContract.BookCopiesEntry;
 import com.example.dbproject.data.LibraryContract.BooksEntry;
@@ -31,7 +32,8 @@ public class DBconnections extends SQLiteOpenHelper {
                 + BooksEntry.COLUMN_BOOK_PUBLICATION_HOUSE + " TEXT NOT NULL, "
                 + BooksEntry.COLUMN_BOOK_AUTHOR + " TEXT NOT NULL, "
                 + BooksEntry.COLUMN_BOOK_CATEGORY + " TEXT NOT NULL, "
-                + BooksEntry.COLUMN_BOOK_NUMBER_OF_COPIES + " INTEGER NOT NULL"
+                + BooksEntry.COLUMN_BOOK_NUMBER_OF_COPIES + " INTEGER NOT NULL, "
+                + BooksEntry.COLUMN_BOOK_ICON + " INTEGER DEFAULT " + R.drawable.book_icon
                 + ");";
         db.execSQL(SQL_CREATE_BOOKS_TABLE);
 
@@ -157,7 +159,7 @@ public class DBconnections extends SQLiteOpenHelper {
                 + LibraryContract.UpdatedCopiesEntry.DATE_OF_UPDATE + " TEXT NOT NULL, "
                 + LibraryContract.UpdatedCopiesEntry.BOOK_ID + " INTEGER NOT NULL, "
                 + LibraryContract.UpdatedCopiesEntry.OLD_Copy_Number + " TEXT NOT NULL, "
-                + LibraryContract.UpdatedCopiesEntry.NEW_Copy_Number + " TEXT NOT NULL);" ;
+                + LibraryContract.UpdatedCopiesEntry.NEW_Copy_Number + " TEXT NOT NULL);";
         db.execSQL(SQL_CREATE_archives_copies_TABLE);
     }
 
@@ -180,26 +182,26 @@ public class DBconnections extends SQLiteOpenHelper {
     }
 
     private void insertDefaultRecordsToBooks(SQLiteDatabase db) {
-        String insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1000, 'أحياء حلب القديمة', '2006-12-13', 'وزارة الثقافة السورية', 'خير الدين الأسدي', 'التاريخ', 1);";
+        String insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + "(ID, title, publication_date, publication_house, author, category, number_of_copies) VALUES (1000, 'أحياء حلب القديمة', '2006-12-13', 'وزارة الثقافة السورية', 'خير الدين الأسدي', 'التاريخ', 1);";
         db.execSQL(insert_to_books);
         String insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1000, 1,1, 0);";
         db.execSQL(insert_to_copies);
 
-        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1001, 'أرض زيكولا', '2010-11-13', 'صرح للنشر والتوزيع', 'عمرو عبد الحميد', 'روايات وقصص أدبية', 2);";
+        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + "(ID, title, publication_date, publication_house, author, category, number_of_copies) VALUES (1001, 'أرض زيكولا', '2010-11-13', 'صرح للنشر والتوزيع', 'عمرو عبد الحميد', 'روايات وقصص أدبية', 2);";
         db.execSQL(insert_to_books);
         insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1001, 1,1, 0);";
         db.execSQL(insert_to_copies);
         insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1001, 2,2, 0);";
         db.execSQL(insert_to_copies);
 
-        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1002, 'حديث الصباح', '2015-12-11', 'دار كلمات', 'أدهم الشرقاوي', 'روايات وقصص أدبية', 2);";
+        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + "(ID, title, publication_date, publication_house, author, category, number_of_copies) VALUES (1002, 'حديث الصباح', '2015-12-11', 'دار كلمات', 'أدهم الشرقاوي', 'روايات وقصص أدبية', 2);";
         db.execSQL(insert_to_books);
         insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1002, 1,1, 0);";
         db.execSQL(insert_to_copies);
         insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1002, 2,1, 0);";
         db.execSQL(insert_to_copies);
 
-        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + " VALUES (1003, 'أسرار عقل المليونير', '2017-11-23', 'جرير', 'هارف ايكر', 'تنمية', 1);";
+        insert_to_books = "INSERT INTO " + BooksEntry.TABLE_NAME + "(ID, title, publication_date, publication_house, author, category, number_of_copies) VALUES (1003, 'أسرار عقل المليونير', '2017-11-23', 'جرير', 'هارف ايكر', 'تنمية', 1);";
         db.execSQL(insert_to_books);
         insert_to_copies = "INSERT INTO " + BookCopiesEntry.TABLE_NAME + " VALUES (1003, 1,1, 0);";
         db.execSQL(insert_to_copies);
@@ -291,6 +293,16 @@ public class DBconnections extends SQLiteOpenHelper {
         db.execSQL(insert_to_readers);
         insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1009, '2019-9-19', '2020-9-19', 'فعال');";
         db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1010, 'فتحي', 'محمد', '1985-9-6', 'جنين', 'ذكر', 0596773654, 'فعال');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1010, '2018-12-19', '2019-12-19', 'منتهٍ');";
+        db.execSQL(insert_to_sub);
+
+        insert_to_readers = "INSERT INTO " + ReadersEntry.TABLE_NAME + " VALUES (1011, 'سيرين', 'محمد', '1995-9-3', 'نابلس', 'أنثى', 0597773654, 'فعال');";
+        db.execSQL(insert_to_readers);
+        insert_to_sub = "INSERT INTO " + SubscriptionsEntry.TABLE_NAME + " VALUES (1011, '2018-12-31', '2019-12-31', 'فعال');";
+        db.execSQL(insert_to_sub);
     }
 
     @Override
@@ -322,13 +334,20 @@ public class DBconnections extends SQLiteOpenHelper {
         String SQL_DELETE_SUBSCRIPTIONS = "DROP TABLE IF EXISTS " + LibraryContract.SubscriptionsEntry.TABLE_NAME + ";";
         db.execSQL(SQL_DELETE_SUBSCRIPTIONS);
         onCreate(db);
+
+        String SQL_DELETE_UPDATED_READER = "DROP TABLE IF EXISTS " + LibraryContract.UpdatedReadersEntry.TABLE_NAME + ";";
+        db.execSQL(SQL_DELETE_UPDATED_READER);
+        onCreate(db);
+
+        String SQL_DELETE_UPDATED_COPIES = "DROP TABLE IF EXISTS " + LibraryContract.UpdatedCopiesEntry.TABLE_NAME + ";";
+        db.execSQL(SQL_DELETE_UPDATED_COPIES);
+        onCreate(db);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
-
 
     private void create_triggers(SQLiteDatabase db) {
         db.execSQL("CREATE TRIGGER IF NOT EXISTS update_reader AFTER UPDATE ON " + ReadersEntry.TABLE_NAME
