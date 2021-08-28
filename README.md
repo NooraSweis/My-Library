@@ -1,5 +1,10 @@
 # Overview
 My Library is an Andriod application built to facilitate the work for library staff, using Java and SQLite database.
+- [UML Class Diagram](https://drive.google.com/file/d/1y-aYzGFfhEeWqay1ZFJqgmQJ9y5ambNI/view?usp=sharing).
+- [ER Diagram](https://drive.google.com/file/d/1W1EyZU4ZLscXQC3ESySknZ4Zf1X_tmhE/view?usp=sharing).
+- [Database queries](https://drive.google.com/file/d/1j0Kufif3sudMSJtcNPw4y7FH9Gwv69eB/view?usp=sharing).
+- [APK](https://drive.google.com/file/d/16NdfQxKs9S0RpBItifuD-nbDjIkvXsEX/view?usp=sharing).
+
 
 # Installation
 Clone this repository and import it into Android Studio:
